@@ -1,26 +1,23 @@
-from collections import defaultdict 
-#36. Valid Sudoku
-def isValidSudoku(board: list[list[str]]) -> bool:
-    #Idea: check if each small square belongs to coordinated-associated rows, cols, and sqr 
-    #Implement: create hashset (dict of sets) as cols, rows and sqr
-    #each row, col, sqr is a set
-    #Form of each dict(set): e.g: rows = {0: {set}, 1:{set},...}
-    cols = defaultdict(set) 
-    rows = defaultdict(set)
-    sqr = defaultdict(set)
+def productExceptSelf(nums: list[int]) -> list[int]:
+    #Create 2 arrays: prefix product and postfix product.
+    #Output[i] = prefix[i-1] * postfix [i+1]
+    #Time: O(n), Space: O(3n)
+    l = len(nums)
+    pre, pos= [nums[0]]*l, [nums[l-1]]*l
+    j = l - 2
+    for i in range(1, l):
+        pre[i] = pre[i-1] * nums[i]
+        pos[j] = pos[j+1] * nums[j]
+        j-=1
+    #init first and last in output
+    out = [pos[1]]*l
+    out[l-1] = pre[l-2]
+    
+    for i in range(1,l-1):
+        out[i] = pre[i-1]*pos[i+1]
+    
+    print(pre, pos, out)
+    return out
 
-    for r in range(9):
-            for c in range(9):
-                if board[r][c] == ".":
-                    continue
-                if (
-                    board[r][c] in rows[r]
-                    or board[r][c] in cols[c]
-                    or board[r][c] in sqr[(r // 3, c // 3)]
-                ):
-                    return False
-                cols[c].add(board[r][c])
-                rows[r].add(board[r][c])
-                sqr[(r // 3, c // 3)].add(board[r][c])
-
-    return True
+nums = [1,2,3,4]
+productExceptSelf(nums)
