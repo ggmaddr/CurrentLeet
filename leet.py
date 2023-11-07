@@ -1,26 +1,19 @@
-
-def generateParenthesis(n: int) -> list[str]:
-    out = []
-    comb = [] #each combination
-    #recursion with # of o and c parentheses from 0 to n
+def dailyTemperatures(temperatures: list[int]) -> list[int]:
     
-    def backtrack(ocount, ccount):
-        #base case
-        if ocount == n and ccount == n:
-            out.append("".join(comb))
-        
-        if ocount < n:
-            comb.append('(')
-            backtrack(ocount+1, ccount)
-            comb.pop()
-        if ccount < ocount: 
-            comb.append(')')
-            backtrack(ocount, ccount+1)
-            comb.pop()
-
+        #Pattern reg: find nearest correlation -> stack.pop get the most recent val within the correlation.
+    #Add temps to stacks, only pop when found the nearest warm.
     
-    backtrack(0,0)
+    st = [] #val:count stack
+    out = [0]*len(temperatures)
+    
+    for i,t in enumerate(temperatures):
+        while st and t > st[-1][0]: #st[-1][0] = temp at top node
+            stT,stIndex = st.pop()
+            out[stIndex] = i - stIndex            
+        st.append((t,i)) #i, t
+
     return out
 
-n = 3
-print(generateParenthesis(n))
+# temperatures = [71,71,76,71,71,76,71,71,71,71,76,76,71,71,71,76,76,76,71,76,71,71,71,76,76,76,76,71,71,76,71,76,71,76,71,71,76,76,76,76,71,76,71,71,71,71,71,76,71,76,76,76,76,71,71,71,76,76,71,71,71,71,76,71,71,76,71,71,71,71,76,71,71,71,76,71,76,71,76,76,76,76,76,71,76,71,71,76,71,76,71,76,76,71,71,76,76,76,71,76]
+temperatures = [73,74,75,71,69,72,76,73]
+print(dailyTemperatures(temperatures))
