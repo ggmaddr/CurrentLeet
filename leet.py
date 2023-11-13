@@ -1,37 +1,38 @@
-from collections import defaultdict
-def countPairs(arr: list[int], n: int) -> int:
-    # Initialize answer and maximum value in the array
-    ans, mx = 0, 0
-    # Create a defaultdict to store the frequency of each integer in the array
-    mp = defaultdict(int)
-    # Iterate through each integer in the array
-    for ai in arr:
-        # Update the frequency of each integer in the defaultdict
-        mp[ai] += 1
-        # Update the maximum value in the array
-        mx = max(mx, ai)
-    # Iterate through each integer i from 0 to mx
-    for i in range(mx+1):
-        # If i is not present in the defaultdict, skip to the next integer
-        if i not in mp:
-            continue
-        # Iterate through each integer j from i to mx
-        for j in range(i, mx+1):
-            # If j is not present in the defaultdict, skip to the next integer
-            if j not in mp:
-                continue
-            # Check if the bitwise AND of i and j has only one set bit
-            if bin(i & j).count('1') == 1:
-                # If i is equal to j, add the product of nCr(mp.get(i), 2) 
-                # to the answer
-                if i == j:
-                    ans += (mp[i] * (mp[i]-1)) // 2
-                # If i is not equal to j, add the product of mp.get(i) 
-                # and mp.get(j) to the answer
-                else:
-                    ans += mp[i] * mp[j]
-    # Return the answer
-    return ans
-arr = [6, 4, 2, 3]
-n = len(arr)
-print(countPairs(arr, n))
+def checkInclusion(s1: str, s2: str) -> bool:
+
+    if len(s1) > len(s2):
+        return False
+
+    s1Count, s2Count = [0] * 26, [0] * 26
+    for i in range(len(s1)):
+        s1Count[ord(s1[i]) - ord("a")] += 1
+        s2Count[ord(s2[i]) - ord("a")] += 1
+
+    matches = 0
+    for i in range(26):
+        matches += 1 if s1Count[i] == s2Count[i] else 0
+
+    l = 0
+    for r in range(len(s1), len(s2)):
+        if matches == 26:
+            return True
+
+        index = ord(s2[r]) - ord("a")
+        s2Count[index] += 1
+        if s1Count[index] == s2Count[index]:
+            matches += 1
+        elif s1Count[index] + 1 == s2Count[index]:
+            matches -= 1
+
+        index = ord(s2[l]) - ord("a")
+        s2Count[index] -= 1
+        if s1Count[index] == s2Count[index]:
+            matches += 1
+        elif s1Count[index] - 1 == s2Count[index]:
+            matches -= 1
+        l += 1
+    return matches == 26
+
+s1 = "adc"
+s2 = "dcda"
+checkInclusion(s1,s2)
