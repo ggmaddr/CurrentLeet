@@ -1,38 +1,83 @@
-def checkInclusion(s1: str, s2: str) -> bool:
+from typing import Optional
 
-    if len(s1) > len(s2):
-        return False
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+    def __str__(self):
+        s = "("+ str(self.val) + ") => "
+        tm = self.next
+        while tm:
+            s += str(tm.val) + " -> "
+            tm = tm.next
+        return s
+    def __repr__(self):
+        s = "("+ str(self.val) + ") => "
+        tm = self.next
+        while tm:
+            s += str(tm.val) + " -> "
+            tm = tm.next
+        return s
+            
+            
 
-    s1Count, s2Count = [0] * 26, [0] * 26
-    for i in range(len(s1)):
-        s1Count[ord(s1[i]) - ord("a")] += 1
-        s2Count[ord(s2[i]) - ord("a")] += 1
+def print_list(head: Optional[ListNode]) -> None:
+    while head:
+        print(head.val, end=" -> ")
+        head = head.next
+    print("None")
 
-    matches = 0
-    for i in range(26):
-        matches += 1 if s1Count[i] == s2Count[i] else 0
+# Helper function to create a linked list from a list of values
+def create_list(values):
+    if not values:
+        return None
+    head = ListNode(values[0])
+    current = head
+    for val in values[1:]:
+        current.next = ListNode(val)
+        current = current.next
+    return head
 
-    l = 0
-    for r in range(len(s1), len(s2)):
-        if matches == 26:
-            return True
+import math
+def reorderList(head: Optional[ListNode]) -> None:
+    """
+    Do not return anything, modify head in-place instead.
+    """
+    # find middle
+    s, f = head, head
+    while f.next and f.next.next:
+        s = s.next
+        f = f.next.next
+    
+    #split
+    se = s.next #saved second half
+    s.next = None #cut tail at mid
+    #mid 's' still belongs to head -> cut tail of head
+    
+    #Reverse
+    prev = None
+    while se:
+        tm = se.next
+        se.next = prev
+        prev = se
+        se = tm
+    
+    se = prev #prev is reversed list
+    
+    #Merge 2 halves
+    
+    fi = head #first half
+    
+    while fi and se:
+        fnext, snext = fi.next, se.next
+        fi.next = se
+        se.next = fnext
+        fi, se = fnext,snext
+    return head #for testing
+    
+head = [1,2,3,4,5,6,7,8,9]
 
-        index = ord(s2[r]) - ord("a")
-        s2Count[index] += 1
-        if s1Count[index] == s2Count[index]:
-            matches += 1
-        elif s1Count[index] + 1 == s2Count[index]:
-            matches -= 1
+head1 = create_list(head)
 
-        index = ord(s2[l]) - ord("a")
-        s2Count[index] -= 1
-        if s1Count[index] == s2Count[index]:
-            matches += 1
-        elif s1Count[index] - 1 == s2Count[index]:
-            matches -= 1
-        l += 1
-    return matches == 26
-
-s1 = "adc"
-s2 = "dcda"
-checkInclusion(s1,s2)
+print(reorderList(head1))
