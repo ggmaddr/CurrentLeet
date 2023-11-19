@@ -39,25 +39,35 @@ def create_list(values):
         current = current.next
     return head
 
-def removeNthFromEnd(head: Optional[ListNode], n: int) -> Optional[ListNode]:
-    
-    dummy = ListNode()
-    #Dummy to remove head.
-    dummy.next = head 
-    l, r = dummy, head
-    while n > 0:
-       r = r.next
-       n -=1
-    #push r to null
-    while r: 
-        r = r.next
-        l = l.next
-    l.next = l.next.next
-    
-    return dummy.next
+def addTwoNumbers(l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        res = ListNode()
+        temp = res
+        carr = 0 #carry
+        
+        #finsih loop while both l1 and l2 end
+        while l1 or l2:
+            
+            if l1 and l2:
+                ssum = l1.val + l2.val + carr
+            elif l1:
+                ssum = l1.val + carr if l1 else l2.val + carr
+        
+            temp.val = ssum%10
+            carr = ssum//10
 
-head = [1,2,3]
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l1 else None
+            if l1 or l2:
+                temp.next = ListNode()
+                temp = temp.next
+                
+        if carr == 1:
+            temp.next = ListNode()
+            temp = temp.next
+        
+        return res
+l1 = create_list([9,9,9,9,9,9,9])
+l2 = create_list([9,9,9,9])
+addTwoNumbers(l1, l2)
 
-head1 = create_list(head)
-print(removeNthFromEnd(head1,1))
     
