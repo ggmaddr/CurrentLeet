@@ -6,78 +6,43 @@ class LRUCache:
         self.tail = Node() #least recent used
         self.mdict = dict()
         
-    def getUse(self, uNode):
+    def remove(self,node):
+        #all nodes have prev and next thanks to head and tail
+        prev, next = node.prev, node.next
+        prev.next = next
+        next.prev = prev
+        
+    def insert(self,node):
+        prev, next = self.head.prev, self.head
+        prev.next = next.prev =node
+        node.next, node.prev = next, prev
         
         
-        currhead= self.head
-        self.head = uNode 
-        self.head.next = currhead
-        currhead.prev = uNode
         
-        self.head.prev = None
-    
     def get(self, key: int) -> int:
-        if key not in self.mdict.keys():
+        if key not in self.mdict:
             return -1
-        
-        getNode = self.mdict[key]
-
-        
-        if not getNode.prev: #if node is head
-            return getNode.val
-        
-        #if node is tail
-        if not getNode.next:
-            self.tail = getNode.prev #update tail
-            self.tail.next = None
-            # print("im tail 1", self.tail)
-        else:
-            getNode.next.prev = getNode.prev #next point back to getNode's back 
-            getNode.prev.next = getNode.next #prev point next to getNode's next
-        
-        
-        # print("im tail " /, self.tail)
-
-        return getNode.val
-        
-        
+        node = self.mdict[key]
+        #each time use the element, remove and reinsert
+        self.remove(node)
+        self.insert(node)
+        return node.val
+    
     def put(self, key: int, value: int) -> None:
         
-        if key in self.mdict.keys():
-            node = self.mdict[key]
-            node[key] = value
+        if key in self.mdict:
+            self.remove(self.mdict[key])
             
+        nNode = Node(key=key, val=val)
+        #add to dict and list
+        self.insert(nNode)
+        self.mdict[key] = nNode
         
-        #if first node
-        if self.head.val == -1:
-            self.head = Node(key=key,val=value)
-            self.mdict[key] = self.head
-            return 
-        
-        newN = Node(key=key, val=value) #new node
-        
-        #add to front
-        currhead = self.head
-        #if not head.next (tail not exist)
-        if not currhead.next:
-            self.tail = currhead
-            
-        currhead.prev = newN
-        newN.next = currhead
-        
-        
-        self.head = newN
-        self.mdict[key] = self.head
-        
-        #dismiss the LRU
-        if len(self.mdict) > self.capacity:
-            
-            ntail = self.tail.prev #next tail
-            ntail.next = None
-            
-            self.mdict.pop(self.tail.key)#Reason why Node should have key attribute
-
-            self.tail = ntail
+        #dismiss LRU
+        if len(self.mdict) > capacity:
+            lru = self.tail.next
+            self.remove(self.mdict[lru])
+            del self.mdict(lru.key)
 
             
         
