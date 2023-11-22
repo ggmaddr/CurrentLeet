@@ -2,9 +2,11 @@ class LRUCache:
 
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.head = Node() #most recent used
-        self.tail = Node() #least recent used
-        self.mdict = dict()
+        self.head = Node(0,0) #most recent used
+        self.tail = Node(0,0) #least recent used
+        self.mdict = {}
+        self.tail.next, self.head.prev = self.head, self.tail
+        
         
     def remove(self,node):
         #all nodes have prev and next thanks to head and tail
@@ -21,11 +23,14 @@ class LRUCache:
         
     def get(self, key: int) -> int:
         if key not in self.mdict:
+            print("get: ",-1)
+
             return -1
         node = self.mdict[key]
         #each time use the element, remove and reinsert
         self.remove(node)
         self.insert(node)
+        print("get: ",node.val)
         return node.val
     
     def put(self, key: int, value: int) -> None:
@@ -33,16 +38,16 @@ class LRUCache:
         if key in self.mdict:
             self.remove(self.mdict[key])
             
-        nNode = Node(key=key, val=val)
+        nNode = Node(key=key, val=value)
         #add to dict and list
-        self.insert(nNode)
         self.mdict[key] = nNode
+        self.insert(nNode)
         
         #dismiss LRU
-        if len(self.mdict) > capacity:
+        if len(self.mdict) > self.capacity:
             lru = self.tail.next
-            self.remove(self.mdict[lru])
-            del self.mdict(lru.key)
+            self.remove(lru)
+            self.mdict.pop(lru.key)
 
             
         
@@ -66,7 +71,7 @@ class LRUCache:
         s+=str(self.mdict)
         return s
 class Node():
-    def __init__(self, key = -1, val = -1, next = None, prev=None):
+    def __init__(self, key, val, next = None, prev=None):
         self.key = key
         self.val = val
         self.next = next
@@ -76,17 +81,15 @@ class Node():
     def __repr__(self) -> str:
         return "(" + str(self.key) + ": " + str(self.val) + ")"
 
-capacity = 2
+capacity = 1
 
 obj = LRUCache(capacity)
 # param_1 = obj.get(3)
 obj.put(2, 1)
-obj.put(1, 1) 
+obj.get(2)
+obj.put(3, 2)
+obj.get(2)
+obj.get(3)
 
-obj.put(2, 3)
-
-obj.put(4, 1)
- 
-print("get 1",obj.get(1)   )
-print("get 2",obj.get(2)   )
+# obj.put(4, 1)
 print(obj)
