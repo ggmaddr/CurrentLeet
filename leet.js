@@ -1,27 +1,54 @@
 
-function recommendProducts(products, searchWord) {
-    const recommendedProducts = [];
-    for (let i = 0; i < searchWord.length; i++) {
-        const currentPrefix = searchWord.substring(0, i + 1);
-        const matchingProducts = [];
-        // Filter products with the current prefix
+const canvas = document.getElementById('canvas');  
+const ctx = canvas.getContext('2d');  
+  
+const eyeRadius = 20;  
+const eyeCenterX = canvas.width / 2;  
+const eyeCenterY = canvas.height / 2;  
+const eyeDistance = 50; // Distance between eyes  
+  
+let mouseX = 0;  
+let mouseY = 0;  
+ 
+function drawEyes() {  
+ctx.clearRect(0, 0, canvas.width, canvas.height);  
 
+const relativeX = mouseX - eyeCenterX;  
+const relativeY = mouseY - eyeCenterY;  
 
-        for (const product of products) {
-            if (product.toLowerCase().startsWith(currentPrefix.toLowerCase())) {
-                matchingProducts.push(product);
-            }
-        }
+const angle = Math.atan2(relativeY, relativeX);  
 
-        // Sort matching products lexicographically
-        matchingProducts.sort();
-        // Limit the number of recommended products to 3 
-        const recommendedProductsForCurrentPrefix = matchingProducts.slice(0, 3);
-        recommendedProducts.push(recommendedProductsForCurrentPrefix);
-    }
+const leftEyeX = eyeCenterX - eyeDistance * Math.cos(angle + 0.3);  
+const leftEyeY = eyeCenterY - eyeDistance * Math.sin(angle + 0.3);  
+const rightEyeX = eyeCenterX + eyeDistance * Math.cos(angle - 0.3);  
+const rightEyeY = eyeCenterY + eyeDistance * Math.sin(angle - 0.3);  
 
-    return recommendedProducts;
+drawEye(leftEyeX, leftEyeY, angle + 0.3);  
 
-}
-products = ["mobile", "mouse", "moneypot", "monitor", "mousepad"]
-searchWord = "mouse"
+drawEye(rightEyeX, rightEyeY, angle - 0.3);  
+}  
+
+function drawEye(eyeX, eyeY, eyeAngle) {  
+ctx.fillStyle = 'black';  
+ctx.beginPath();  
+ctx.arc(eyeX, eyeY, eyeRadius, 0, 2 * Math.PI);  
+ctx.fill();  
+
+ctx.fillStyle = '#2ecc71';  
+ctx.beginPath();  
+ctx.arc(eyeX, eyeY, eyeRadius * 0.7, 0, 2 * Math.PI);  
+ctx.fill();  
+
+ctx.fillStyle = 'black';  
+ctx.beginPath();  
+ctx.arc(eyeX + eyeRadius * 0.5 * Math.cos(eyeAngle), eyeY + eyeRadius * 0.5 * Math.sin(eyeAngle), eyeRadius * 0.3, 0, 2 * Math.PI);  
+ctx.fill();  
+}  
+
+canvas.addEventListener('mousemove', (event) => {  
+mouseX = event.offsetX;  
+mouseY = event.offsetY;  
+drawEyes();  
+});  
+
+drawEyes();  
