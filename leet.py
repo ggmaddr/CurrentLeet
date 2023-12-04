@@ -45,38 +45,27 @@ def to_tree(lst):
         i += 1
 
     return root
-# root = [3,9,20,None,None,15,7]
-# mtree = to_tree(root)
-# mtree
-
-#Approach 2: O(mn)
-def isSubtree(root: TreeNode, t: TreeNode) -> bool:
- 
-    print(root, t)    
-
-    if not t:
-        return True
-    if not root:
-        print("lastfalse 1")
-        return False
+from collections import deque
+#BFS
+def levelOrder(root: Optional[TreeNode]) -> list[list[int]]:
+    res = []
     
-    if isSameTree(root, t):
-        return True
-    #dfs traverse: If leftsub tree is equal or rightsubtree is equal
-    boole = isSubtree(root.left, t) or isSubtree(root.right, t)
-    if not boole: print("lastfalse 2")
+    queue = deque([root])
+    while queue:
+        temp = [] #create new list at curr level
+        #for each node at curr level
+        for i in range(len(queue)):
+            node = queue.popleft()  
+            if node: 
+                temp.append(node.val)
 
-    return boole
-def isSameTree(q,p) -> bool:
-    if not q and not p:
-        return True
+            if node.left:
+                queue.append(node.left)
+            if node.right: 
+                queue.append(node.right)
+        
+        res.append(temp)
+    return res
+root = to_tree([3,9,20,None,None,15,7])
+print(levelOrder(root))
     
-    if p and q and p.val == q.val:
-        return isSameTree(p.left,q.left) and isSameTree(p.right,q.right) 
-    
-    return False #False otherwise
-
-root = to_tree([1,None,1,None,1,None,1,None,1,None,1,None,1,None,1,None,1,None,1,None,1,2])
-t = to_tree([1,None,1,None,1,None,1,None,1,None,1,2])
-
-print(isSubtree(root, t))
