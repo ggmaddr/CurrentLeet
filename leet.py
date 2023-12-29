@@ -1,71 +1,126 @@
-# from typing import Optional
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-#     def __repr__(self):
-#         result = "tree: {"
-#         queue = [self]
+def solution(queries):
+    in_memory_database = {}
+    modification_count = {}
 
-#         while queue:
-#             current = queue.pop(0)
+    def set_or_inc(key, field, value):
+        if key not in in_memory_database:
+            in_memory_database[key] = {field: int(value)}
+        elif field not in in_memory_database[key]:
+            in_memory_database[key][field] = int(value)
+        else:
+            in_memory_database[key][field] += int(value)
 
-#             if current:
-#                 result += str(current.val) + " "
+        # Update modification count
+        modification_count[key] = modification_count.get(key, 0) + 1
 
-#                 # Enqueue left and right children
-#                 queue.append(current.left)
-#                 queue.append(current.right)
-#             else:
-#                 result += "null "
-#         result += "}"
-#         return result.rstrip()
-# def to_tree(lst):
-#     if not lst:
-#         return None
+        return str(in_memory_database[key][field])
 
-#     root = TreeNode(lst[0])
-#     nodes = [root]
-#     i = 1
+    def get(key, field):
+        if key in in_memory_database and field in in_memory_database[key]:
+            return str(in_memory_database[key][field])
+        else:
+            return ""
 
-#     while nodes and i < len(lst):
-#         current = nodes.pop(0)
+    def delete(key, field):
+        if key in in_memory_database and field in in_memory_database[key]:
+            del in_memory_database[key][field]
+            modification_count[key]+=1
 
-#         if lst[i] is not None:
-#             current.left = TreeNode(lst[i])
-#             nodes.append(current.left)
+            # If all fields in a record have been deleted, remove the record
+            if not in_memory_database[key]:
+                del in_memory_database[key]
+                del modification_count[key]
 
-#         i += 1
+            return "true"
+        else:
+            return "false"
 
-#         if i < len(lst) and lst[i] is not None:
-#             current.right = TreeNode(lst[i])
-#             nodes.append(current.right)
+    def top_n_keys(n):
+        sorted_keys = sorted(
+            modification_count.keys(),
+            #if tie, sort by k (key names)lexicographical 
+            key=lambda k: (-modification_count[k], k),
+            reverse=False,
+        )
 
-#         i += 1
+        result = []
 
-#     return root
-# # root = [3,9,20,None,None,15,7]
-# # mtree = to_tree(root)
-# # mtree
-# def kthSmallest(root: Optional[TreeNode], k: int) -> int:
-#     count = 0
-#     stack = [root]
-#     cur = root
-#     while stack or cur:
-#         #go all the way to bottom left before performing code
-#         while cur:
-#             stack.append(cur) #all e in stack is not null
-#             cur = cur.left
-        
-#         cur = stack.pop() 
-#         #perform at node
-#         count+=1
-#         if count == k:
-#             return cur.val
-#         #go to rights
-#         cur = cur.right
+        for key in sorted_keys[:n]:
+            result.append(f"{key}({modification_count[key]})")
+
+        return ", ".join(result)
     
-# root = to_tree([50, 30,90,15,40,72,101,10,25,None, None, 65, 76, 95, 110, 8, 12, None, None, 59, None, None, None, None, None, None,None, 6,9,11,13,7])
-# print(root)
-# print(kthSmallest(root, 2))
+    def set_or_inc_by_caller(key, field, value, caller_id):
+        return set_or_inc(key, field, value, caller_id)
+
+    def delete_by_caller(key, field, caller_id):
+        return delete(key, field, caller_id)
+
+    def lock(caller_id, key):
+        if key not in in_memory_db:
+            return "invalid_request"
+
+        if key in lock_status:
+            if lock_status[key] == caller_id:
+                return ""
+
+            if key not in lock_queue:
+                lock_queue[key] = []
+
+            lock_queue[key].append(caller_id)
+            return "wait"
+
+        lock_status[key] = caller_id
+        return "acquired"
+
+    def unlock(key):
+        if key not in in_memory_db:
+            return "invalid_request"
+
+        if key in lock_status:
+            del lock_status[key]
+
+            if key in lock_queue:
+                next_in_queue = lock_queue[key].pop(0) if lock_queue[key] else None
+
+                if next_in_queue:
+                    lock_status[key] = next_in_queue
+                    return "released"
+
+            return "released"
+
+        return ""
+
+
+    result = []
+
+    for query in queries:
+        operation, *params = query
+        if operation == "SET_OR_INC":
+            result.append(set_or_inc(*params))
+        elif operation == "UNLOCK":
+            result.append(unlock(*params))
+        elif operation == "LOCK":
+            result.append(lock(*params))
+        elif operation == "SET_OR_INC_BY_CALLER":
+            result.append(set_or_inc_by_caller(*params))
+        elif operation == "DELETE_BY_CALLER":
+            result.append(delete_by_caller(*params))
+        elif operation == "GET":
+            result.append(get(*params))
+
+    return result
+
+
+queries = [["SET_OR_INC","item1","cost","30"], 
+ ["GET","item1","cost"], 
+ ["DELETE","item1","cost"], 
+ ["DELETE","item1","cost"], 
+ ["GET","item1","cost"], 
+ ["SET_OR_INC","item2","cost","50"], 
+ ["SET_OR_INC","item3","cost","60"], 
+ ["SET_OR_INC","item3","cost","4"], 
+ ["GET","item2","cost"], 
+ ["DELETE","item2","cost"], 
+ ["GET","item3","cost"]]
+solution(queries)
