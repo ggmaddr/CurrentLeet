@@ -1,20 +1,22 @@
-class Solution1:
-    def subsets(self, nums: list[int]) -> list[list[int]]:
-        res = []
-        subset = []
-        def dfs(i):
-            #base case: reach the end of decision tree (completed set)
-            if i >= len(nums):
-                res.append(subset[:]) #add copy to keep modifying subset
-                return 
-            
-            #decision to choose nums[i]
-            subset.append(nums[i])
-            dfs(i+1)
-            #decision not to choose nums[i], still go to next step
-            subset.pop()
-            dfs(i+1)
-        dfs(0)
-        return res
+def productExceptSelf(nums: list[int]) -> list[int]:
+        #Create an preArr stores prefix product up to + (exclude) nums[i]
+        #Loop from the end of preArr: at each preArr[i], multiply by current postfix product var
+
+        #Time: O(n), Space: O(n)
+        l = len(nums)
+        out = [1] * l
+        
+        for i in range(1, l):
+            #Create an preArr stores prefix product up to nums[i] + (exclude) nums[i]
+            out[i] = out[i-1] * nums[i-1]
+        print(out)
+        #init first and last in output
+        pos = nums[l-1]
+        for i in range(l-2, -1, -1):
+            out[i] = out[i] * pos  #upto prefix * upto postfix 
+            pos *= nums[i]
+        
+        print(out)
+        return out
 nums = [1,2,3,4]
-print(Solution1.subsets(Solution1, nums))
+print(productExceptSelf(nums))
