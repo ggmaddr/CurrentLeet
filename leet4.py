@@ -38,26 +38,28 @@ def reorderList(head: Optional[ListNode]) -> None:
     if head.next == None or head.next.next == None:
         return head
         
-    r = 0
     cur = head
     mlist = list()
     while cur:
         mlist.append(cur)
-        r+=1
         cur = cur.next
     
-    stop = r//2
+    r = len(mlist) - 1
+    stop =len(mlist) //2
+
     for l in range (stop):
         # todo: examine 3-4-5 case.   
-        mlist[l].next = mlist[r-1]
-        mlist[r-1].next = mlist[l+1]
+        mlist[l].next = mlist[r]
+        mlist[r].next = mlist[l+1]
         r-=1
-    mlist[r-1].next = None
-    print(head)
+    if len(mlist) % 2 == 0:
+        mlist[r+1].next = None
+    else:
+        mlist[r].next = None
     return head
 
 
-head = [1,2,3,4]
+head = [1,2,3,4,5]
 
 head1 = create_list(head)
 print(head1)
