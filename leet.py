@@ -1,46 +1,28 @@
-# def convert(s: str, numRows: int) -> str:
-#     if numRows == 1 or numRows >= len(s):
-#         return s
-    
-#     rows = [""] * numRows
-#     row, direction = 0, 1  # Start at row 0 and move down
+from collections import Counter, defaultdict
+def get_minimum_window(original: str, check: str) -> str:
+    visited = defaultdict(int) #visited {char: count}; if use defaultdict, notice to not check eq with checkmap[i] for value = 0
+    match = 0 #counts of chars match
+    checkmap = Counter(check)
+    res, resLen = [-1, -1], float('inf')
+    l = 0
+    for r in range(len(original)):
+        visited[original[r]] += 1
+        if visited[original[r]] == checkmap[original[r]] and visited[original[r]]!=0: 
+            match += 1
+           
+        # shrink after found a candidate to be ready for new candidate:
+        while match == len(checkmap):
+             # if match character and smaller len, update result
+            if r-l+1 < resLen or (r-l+1 == resLen and original[l:r+1] < original[res[0]: res[1] + 1]):
+                res = [l, r]
+                resLen = r-l+1
+            #shrink
+            visited[original[l]] -= 1
+            if visited[original[l]] < checkmap[original[l]]:
+                match-=1
+            l += 1
+    return original[res[0]: res[1] + 1] if res != [-1, -1] else ""
 
-#     for char in s:
-#         rows[row] += char  # Add character to current row
-#         if row == 0:  # If at the top, move down
-#             direction = 1
-#         elif row == numRows - 1:  # If at the bottom, move up
-#             direction = -1
-#         row += direction  # Update row index
-    
-#     return "".join(rows)  # Concatenate all rows
-# s = "PAYPALISHIRING"
-# numRows = 4
-# convert(s, numRows)
-
-from collections import Counter
-
-def getMinimumCost(arr):
-    # Count frequencies of elements
-    freq = Counter(arr)
-    
-    # Sort elements by frequency (descending)
-    sorted_elements = sorted(freq.items(), key=lambda x: -x[1])
-    # Reconstruct the array by grouping identical elements
-    grouped_arr = []
-    for element, count in sorted_elements:
-        grouped_arr.extend([element] * count)
-    print(grouped_arr)
-
-    # Calculate cost: sum of distinct elements in prefixes
-    distinct_elements = set()
-    cost = 0
-    for num in grouped_arr:
-        distinct_elements.add(num)
-        cost += len(distinct_elements)
-    
-    return cost
-
-arr = [2, 2, 2,1,3,5,6,3, 3, 1, 1]
-# arr = [1,4,3,2]
-print(getMinimumCost(arr))  # Output: 9
+original = "cdbaeeebaecd"
+check = "abc"
+print(get_minimum_window(original, check)   )
