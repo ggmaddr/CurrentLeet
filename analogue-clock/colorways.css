@@ -1,0 +1,183 @@
+
+/* DARK IDE — PURPLE CODE */
+/* 
+--background: #0f3380;          
+
+--outerFace: #d6c8ff;          
+--outerFace-mid: #c1b0ff;
+--outerFace-deep: #8466ee;
+
+--edge: #b49bff;               
+
+--text: #f4f4ff;
+--text-soft: #e8e6ff;
+--text-muted: #8be9fd;         
+
+--light: #ffffff;
+
+--shadow: #0f172a;
+
+--color-second-hand: #ff79c6;   
+--color-hour-hand: #00d736;      
+--color-minute-hand: #f1fa8c;     */
+
+/* END. */
+
+/* OG REd*/
+/* 
+--background: #e42d20;
+--outerFace: #eedad8;
+--edge: #ca6c64;
+--text: #f3d8d4;
+--text-soft: #f6dbd6;
+--text-muted: #f2d3cf;
+--outerFace-mid: #e1c2bd;
+--outerFace-deep: #d8a49e;
+--light: #ffffff;
+--shadow: #000000;
+
+--color-second-hand: var(--outerFace-mid);
+--color-hour-hand: #4d1302;
+--color-minute-hand: #ffc12fed; 
+
+*/
+
+/* GOLDEN VIBRANCE — BRIGHT STYLE */
+
+/* 
+--background: #ffb700;          
+--outerFace: #fff3d6;           
+--outerFace-mid: #ffe7b3;
+--outerFace-deep: #ffd166;
+--edge: #e09f1f;                
+
+--text: #ffffff;
+--text-soft: #fff9ea;
+--text-muted: #ffe693; 
+
+
+--light: #ffffff;
+--shadow: #000000;
+--color-second-hand: var(--outerFace-mid);
+--color-hour-hand: #000f74;
+--color-minute-hand: #176cffed;
+
+/* 
+
+
+
+/* GOLDEN TWIGHLIGHT */
+:root {
+    --font-display: "Limelight", serif;
+    --font-body: "Limelight", serif;
+  
+    /* color palette - only change here */
+    /* ===== Core Contrast (match red logic) ===== */
+    --background: #003566;     /* very dark base */
+    --face: #f4f1ea;           /* very light warm shell */
+    --edge: #bfa14a;           /* mid gold edge (clear separator) */
+  
+    --text: #f4f1ea;
+    --text-soft: #f8f5ef;
+    --text-muted: #e6dcc6;
+  
+    /* ===== Derived Structure (must ladder properly) ===== */
+    --face-mid: #e8dcc4;       /* slightly darker than face */
+    --face-deep: #d8c7a6;      /* deeper warm tone */
+    --light: #ffffff;
+  
+  
+    --color-bg: var(--background);
+    --color-title: var(--text);
+    --color-subtitle: var(--text-soft);
+    --color-text-shadow: rgba(88, 11, 11, 0.45);
+  
+    --color-clock-shell: var(--face);
+    --color-shell-shadow: var(--edge);
+    --color-clock-shadow: rgba(0, 0, 0, 0.5);
+  
+    --color-ring-grad-1: var(--edge);
+    --color-ring-grad-2: var(--face-mid);
+    --color-ring-grad-3: var(--face-deep);
+    --color-ring-bg: var(--face-mid);
+  
+    --color-dial-bg: var(--background);
+    --color-dial-inner-shadow: rgba(0, 0, 0, 0.6);
+    --color-dial-outer-highlight: var(--light);
+  
+    --color-number: var(--text-muted);
+    --color-number-shadow: rgba(88, 11, 11, 0.35);
+  
+    --color-pin-grad-1: var(--face);
+    --color-pin-grad-2: var(--edge);
+    --color-pin-bg: var(--face);
+    --color-pin-shadow: rgba(0, 0, 0, 0.5);
+    --color-pin-inner-bg: var(--face-mid);
+    --color-pin-inner-shadow: rgba(167, 23, 10, 0.4);
+  
+    /* Keep hand colors separate for quick hand-only edits , MAY CHANGE IF FITS THEME*/
+    --color-second-hand: var(--face-mid);
+    --color-hour-hand: #ff0000;
+    --color-minute-hand: #ffc12fed;
+    --color-hand-shadow-strong: rgba(0, 0, 0, 0.5);
+    --color-hand-shadow-soft: rgba(0, 0, 0, 0.4);
+  }
+
+
+  /* DARK STYLE — DRACULA IDE */
+:root {
+    --font-display: "Limelight", serif;
+    --font-body: "Limelight", serif;
+  
+    /* ===== Core ===== */
+    --background: #282a36;        /* Dracula base */
+    --face: #44475a;              /* outerface surface */
+    --edge: #6272a4;              /* accent indigo edge */
+  
+    --text: #f8f8f2;
+    --text-soft: #e6e6e0;
+    --text-muted: #c5c6d0;
+  
+    /* ===== Derived ladder (follows edge tone) ===== */
+    --face-mid: #3a3d52;
+    --face-deep: #2f3242;
+    --light: #f8f8f2;
+  
+    --color-bg: var(--background);
+    --color-title: var(--text);
+    --color-subtitle: var(--text-soft);
+  
+    /* ===== Shadowing (cool, lifted, IDE-style) ===== */
+    --color-text-shadow: rgba(0, 0, 0, 0.35);
+  
+    --color-clock-shell: var(--face);
+    --color-shell-shadow: rgba(0, 0, 0, 0.55);
+    --color-clock-shadow: rgba(0, 0, 0, 0.65);
+  
+    --color-ring-grad-1: var(--edge);
+    --color-ring-grad-2: var(--face-mid);
+    --color-ring-grad-3: var(--face-deep);
+    --color-ring-bg: var(--face-mid);
+  
+    --color-dial-bg: var(--background);
+    --color-dial-inner-shadow: rgba(0, 0, 0, 0.6);
+    --color-dial-outer-highlight: rgba(255, 255, 255, 0.08);
+  
+    --color-number: #bd93f9;             /* Dracula purple accent */
+    --color-number-shadow: rgba(0, 0, 0, 0.5);
+  
+    --color-pin-grad-1: #44475a;
+    --color-pin-grad-2: #6272a4;
+    --color-pin-bg: #44475a;
+    --color-pin-shadow: rgba(0, 0, 0, 0.55);
+    --color-pin-inner-bg: #3a3d52;
+    --color-pin-inner-shadow: rgba(0, 0, 0, 0.45);
+  
+    /* ===== Hands (IDE accent logic) ===== */
+    --color-second-hand: #50fa7b;    /* Dracula green */
+    --color-hour-hand: #ff79c6;      /* Dracula pink */
+    --color-minute-hand: #f1fa8c;    /* soft yellow */
+  
+    --color-hand-shadow-strong: rgba(0, 0, 0, 0.6);
+    --color-hand-shadow-soft: rgba(0, 0, 0, 0.4);
+  }

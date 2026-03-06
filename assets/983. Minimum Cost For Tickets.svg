@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Pixodesk SVG (https://pixodesk.com) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 580" text-rendering="geometricPrecision" shape-rendering="geometricPrecision">
+  <rect fill="#f8f9fa" rx="10" ry="0" width="850" height="580"/>
+  <text fill="#2c3e50" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" xml:space="preserve" x="425" y="35" data-gn-el-type="text" style="white-space:pre"><tspan>DP Walkthrough: days = [1, 4, 6, 7, 8, 20], costs = [2, 7, 15]</tspan></text>
+  <rect fill="#d1fae5" stroke="#10b981" stroke-width="1.5" rx="2" ry="0" x="50" y="55" width="16" height="16"/>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="72" y="67" data-gn-el-type="text" style="white-space:pre"><tspan>Travel day</tspan></text>
+  <rect fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5" rx="2" ry="0" x="150" y="55" width="16" height="16"/>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="172" y="67" data-gn-el-type="text" style="white-space:pre"><tspan>Skip day</tspan></text>
+  <rect fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="2" ry="0" x="250" y="55" width="16" height="16"/>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="272" y="67" data-gn-el-type="text" style="white-space:pre"><tspan>Optimal choice</tspan></text>
+  <g transform="translate(50, 95)">
+    <text fill="#6b7280" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Base:</tspan></text>
+    <rect fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5" rx="3" ry="0" x="60" y="-18" width="45" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="82" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[0]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="115" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= 0</tspan></text>
+  </g>
+  <g transform="translate(50, 140)">
+    <text fill="#10b981" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Day 1</tspan></text>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="1.5" rx="3" ry="0" x="60" y="-18" width="45" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="82" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[1]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="115" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= min(</tspan></text>
+    <rect fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="3" ry="0" x="165" y="-18" width="90" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="13" xml:space="preserve" x="210" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0 + 2 = 2</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="260" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="275" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0+7=7</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="335" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="350" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0+15=15</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="420" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>)</tspan></text>
+    <text fill="#3b82f6" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="440" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= 2</tspan></text>
+  </g>
+  <g transform="translate(50, 185)">
+    <text fill="#6b7280" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Day 2-3</tspan></text>
+    <rect fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5" rx="3" ry="0" x="70" y="-18" width="65" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="102" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[2,3]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="145" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= dp[prev] = 2</tspan></text>
+    <text fill="#6b7280" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="290" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>(no travel needed)</tspan></text>
+  </g>
+  <g transform="translate(50, 230)">
+    <text fill="#10b981" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Day 4</tspan></text>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="1.5" rx="3" ry="0" x="60" y="-18" width="45" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="82" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[4]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="115" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= min(</tspan></text>
+    <rect fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="3" ry="0" x="165" y="-18" width="90" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="13" xml:space="preserve" x="210" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>2 + 2 = 4</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="260" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="275" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0+7=7</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="335" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="350" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0+15=15</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="420" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>)</tspan></text>
+    <text fill="#3b82f6" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="440" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= 4</tspan></text>
+  </g>
+  <g transform="translate(50, 275)">
+    <text fill="#6b7280" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Day 5</tspan></text>
+    <rect fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5" rx="3" ry="0" x="60" y="-18" width="45" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="82" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[5]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="115" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= dp[4] = 4</tspan></text>
+    <text fill="#6b7280" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="230" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>(no travel needed)</tspan></text>
+  </g>
+  <g transform="translate(50, 320)">
+    <text fill="#10b981" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Day 6</tspan></text>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="1.5" rx="3" ry="0" x="60" y="-18" width="45" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="82" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[6]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="115" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= min(</tspan></text>
+    <rect fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="3" ry="0" x="165" y="-18" width="90" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="13" xml:space="preserve" x="210" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>4 + 2 = 6</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="260" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="275" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0+7=7</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="335" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="350" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0+15=15</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="420" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>)</tspan></text>
+    <text fill="#3b82f6" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="440" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= 6</tspan></text>
+  </g>
+  <g transform="translate(50, 365)">
+    <rect fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="6" ry="0" x="-10" y="-28" width="520" height="48"/>
+    <text fill="#10b981" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Day 7</tspan></text>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="1.5" rx="3" ry="0" x="60" y="-18" width="45" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="82" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[7]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="115" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= min(</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="165" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>6+2=8</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="215" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <rect fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="3" ry="0" x="230" y="-18" width="90" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="13" xml:space="preserve" x="275" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0 + 7 = 7</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="325" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="340" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0+15=15</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="410" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>)</tspan></text>
+    <text fill="#3b82f6" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="430" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= 7</tspan></text>
+    <text fill="#f59e0b" font-family="Arial, sans-serif" font-size="12" font-weight="700" xml:space="preserve" x="480" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>★</tspan></text>
+  </g>
+  <g transform="translate(570, 365)">
+    <text fill="#b45309" font-family="Arial, sans-serif" font-size="12" font-weight="700" xml:space="preserve" x="0" y="-5" data-gn-el-type="text" style="white-space:pre"><tspan>7-day pass wins!</tspan></text>
+    <text fill="#78716c" font-family="Arial, sans-serif" font-size="11" xml:space="preserve" x="0" y="10" data-gn-el-type="text" style="white-space:pre"><tspan>Covers days 1-7</tspan></text>
+  </g>
+  <g transform="translate(50, 420)">
+    <text fill="#10b981" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Day 8</tspan></text>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="1.5" rx="3" ry="0" x="60" y="-18" width="45" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="82" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[8]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="115" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= min(</tspan></text>
+    <rect fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="3" ry="0" x="165" y="-18" width="90" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="13" xml:space="preserve" x="210" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>7 + 2 = 9</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="260" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="275" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>2+7=9</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="325" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="340" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0+15=15</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="410" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>)</tspan></text>
+    <text fill="#3b82f6" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="430" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= 9</tspan></text>
+  </g>
+  <g transform="translate(50, 465)">
+    <text fill="#6b7280" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Day 9-19</tspan></text>
+    <rect fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5" rx="3" ry="0" x="80" y="-18" width="75" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="117" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[9-19]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="165" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= dp[8] = 9</tspan></text>
+    <text fill="#6b7280" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="300" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>(no travel needed)</tspan></text>
+  </g>
+  <g transform="translate(50, 510)">
+    <rect fill="#dcfce7" stroke="#22c55e" stroke-width="2" rx="6" ry="0" x="-10" y="-28" width="520" height="48"/>
+    <text fill="#10b981" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="0" y="0" data-gn-el-type="text" style="white-space:pre"><tspan>Day 20</tspan></text>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="1.5" rx="3" ry="0" x="70" y="-18" width="55" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="14" xml:space="preserve" x="97" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>dp[20]</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="135" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= min(</tspan></text>
+    <rect fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="3" ry="0" x="185" y="-18" width="100" height="28"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="13" xml:space="preserve" x="235" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>9 + 2 = 11</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="290" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="305" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>9+7=16</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="360" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>,</tspan></text>
+    <text fill="#6b7280" font-family="monospace" font-size="13" xml:space="preserve" x="375" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>0+15=15</tspan></text>
+    <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="445" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>)</tspan></text>
+    <text fill="#22c55e" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="465" y="3" data-gn-el-type="text" style="white-space:pre"><tspan>= 11</tspan></text>
+  </g>
+  <rect fill="#ffffff" stroke="#22c55e" stroke-width="3" rx="8" ry="0" x="600" y="480" width="200" height="70"/>
+  <text fill="#2c3e50" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" xml:space="preserve" x="700" y="510" data-gn-el-type="text" style="white-space:pre"><tspan>Final Answer</tspan></text>
+  <text fill="#22c55e" text-anchor="middle" font-family="monospace" font-size="28" font-weight="700" xml:space="preserve" x="700" y="538" data-gn-el-type="text" style="white-space:pre"><tspan>11</tspan></text>
+  <rect fill="#ffffff" stroke="#dee2e6" stroke-width="1.5" rx="6" ry="0" x="600" y="95" width="200" height="130"/>
+  <text fill="#2c3e50" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="700" y="118" data-gn-el-type="text" style="white-space:pre"><tspan>Optimal Strategy</tspan></text>
+  <path stroke="#dee2e6" d="M620,128L780,128"/>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="620" y="150" data-gn-el-type="text" style="white-space:pre"><tspan>Day 1: 1-day pass</tspan></text>
+  <text fill="#3b82f6" text-anchor="end" font-family="monospace" font-size="12" xml:space="preserve" x="770" y="150" data-gn-el-type="text" style="white-space:pre"><tspan>$2</tspan></text>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="620" y="172" data-gn-el-type="text" style="white-space:pre"><tspan>Day 4: 7-day pass</tspan></text>
+  <text fill="#3b82f6" text-anchor="end" font-family="monospace" font-size="12" xml:space="preserve" x="770" y="172" data-gn-el-type="text" style="white-space:pre"><tspan>$7</tspan></text>
+  <text fill="#6b7280" font-family="Arial, sans-serif" font-size="10" xml:space="preserve" x="630" y="187" data-gn-el-type="text" style="white-space:pre"><tspan>(covers days 4-10)</tspan></text>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="620" y="207" data-gn-el-type="text" style="white-space:pre"><tspan>Day 20: 1-day pass</tspan></text>
+  <text fill="#3b82f6" text-anchor="end" font-family="monospace" font-size="12" xml:space="preserve" x="770" y="207" data-gn-el-type="text" style="white-space:pre"><tspan>$2</tspan></text>
+  <path stroke="#dee2e6" d="M620,215L780,215"/>
+  <rect fill="#f3f4f6" stroke="#dee2e6" stroke-width="1.5" rx="6" ry="0" x="600" y="245" width="200" height="80"/>
+  <text fill="#6b7280" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="700" xml:space="preserve" x="700" y="268" data-gn-el-type="text" style="white-space:pre"><tspan>Pass Costs</tspan></text>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="620" y="290" data-gn-el-type="text" style="white-space:pre"><tspan>1-day:</tspan></text>
+  <text fill="#2c3e50" text-anchor="end" font-family="monospace" font-size="12" xml:space="preserve" x="770" y="290" data-gn-el-type="text" style="white-space:pre"><tspan>$2</tspan></text>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="620" y="308" data-gn-el-type="text" style="white-space:pre"><tspan>7-day:</tspan></text>
+  <text fill="#2c3e50" text-anchor="end" font-family="monospace" font-size="12" xml:space="preserve" x="770" y="308" data-gn-el-type="text" style="white-space:pre"><tspan>$7</tspan></text>
+</svg>
