@@ -1,0 +1,101 @@
+:root {
+	/* dark coding color palette */
+	--background: rgb(27, 0, 29);
+	--color-text: #5bff46;
+	--hours-color: rgb(0, 145, 255);
+	--minutes-color: yellow;
+	--seconds-color: red;
+}
+body {
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: var(--background);
+	height: 100vh;
+}
+
+.clock-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.clock-wrapper {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.clock-header {
+	text-align: center;
+}
+.clock-title {
+	margin: 0;
+	font-family: "Limelight", serif;
+	font-size: 30px;
+	font-weight: 400;
+	letter-spacing: 1px;
+	color: var(--color-text);
+	text-shadow: 0 1px 3px var(--color-text); 
+  }
+.text-grid {
+	display: grid;
+	grid-template-columns: 70px 70px;
+	grid-template-rows: 70px 70px;
+	justify-items: center;
+	align-items: center;
+	color: var(--color-text);
+	font-size: 3em;
+	grid-gap: 5px;
+	position: absolute;
+	font-family: 'Varela Round', sans-serif;
+}
+
+svg {
+	transform: rotate(-90deg);
+}
+
+svg > circle {
+	stroke-width: 30px;
+	cy: 200px;
+	cx: 200px;
+	stroke-linecap: round;
+	fill: none;
+}
+
+#hours_text {
+	color: var(--hours-color);
+	text-shadow: 0 0 12px var(--hours-color);
+}
+
+#minutes_text {
+	color: var(--minutes-color);
+	text-shadow: 0 0 12px var(--minutes-color);
+}
+
+#seconds_text {
+	color: var(--seconds-color);
+	text-shadow: 0 0 12px var(--seconds-color);
+}
+
+#ampm {
+	text-shadow: 0 0 12px var(--color-text);
+}
+
+#hours_progress {
+	stroke: var(--hours-color);
+}
+
+#minutes_progress {
+	stroke: var(--minutes-color);
+}
+
+#seconds_progress {
+	stroke: var(--seconds-color);
+}
+
+#ampm {
+	font-size: 1.5rem;
+	margin-top: -20px;
+}

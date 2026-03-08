@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Three Ring Clock</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Limelight&display=swap"
+      rel="stylesheet"
+    />
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="clock-container">
+	<div class="clock-header">
+		<!-- <h1 class="clock-title">Keep calm and &lt;code/&gt;</h1> -->
+	</div>
+	<div class="clock-wrapper">
+		<svg width="400" height="400" viewport="0 0 400 400">
+			<circle id="seconds_progress" r="185"></circle>
+			<circle id="minutes_progress" r="150"></circle>
+			<circle id="hours_progress" r="115"></circle>
+		</svg>
+		<div class="text-grid">
+			<span id="hours_text"></span>
+			<span id="minutes_text"></span>
+			<span id="seconds_text"></span>
+			<span id="ampm"></span>
+		</div>
+	</div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
