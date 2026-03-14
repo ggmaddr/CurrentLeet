@@ -1,0 +1,130 @@
+:root {
+  /* ================================================================ */
+  /* ACTIVE PALETTE — ELECTRIC CRIMSON                                */
+  /* To switch: comment this block out, uncomment another below       */
+  /* ================================================================ */
+
+  --bg:         #2d1b4e;   /* vivid deep purple — not black, not navy */
+  --face-outer: #3d2460;   /* clearly purple face ring */
+  --accent:     #ff2d55;   /* vivid crimson-pink */
+  --hand:       #ffffff;
+  --text-clock: #ffd6e0;   /* soft pink-white */
+  --title:      #ffffff;
+
+  /* END ACTIVE PALETTE */
+
+
+  /* ================================================================ */
+  /* PALETTE 2 — NEON AQUA: ELECTRIC TEAL                             */
+  /* ================================================================ */
+  /*
+  --bg:         #042030;
+  --face-outer: #063045;
+  --accent:     #00f5d4;
+  --hand:       #ffffff;
+  --text-clock: #b0fff4;
+  --title:      #e0fff9;
+  */
+  /* ================================================================ */
+
+
+  /* ================================================================ */
+  /* PALETTE 3 — SOLAR AMBER: VIVID ORANGE                            */
+  /* ================================================================ */
+  /*
+  --bg:         #2a1000;
+  --face-outer: #3d1a00;
+  --accent:     #ff7b00;
+  --hand:       #fff4e0;
+  --text-clock: #ffe4b0;
+  --title:      #fff0e0;
+  */
+  /* ================================================================ */
+
+
+  /* ================================================================ */
+  /* PALETTE 4 — ULTRAVIOLET: NEON VIOLET                             */
+  /* ================================================================ */
+  /*
+  --bg:         #100028;
+  --face-outer: #1c003e;
+  --accent:     #bf5fff;
+  --hand:       #f0e0ff;
+  --text-clock: #e4c8ff;
+  --title:      #f2e0ff;
+  */
+  /* ================================================================ */
+
+
+  /* ================================================================ */
+  /* PALETTE 5 — CYBER LIME: MATRIX GREEN                             */
+  /* ================================================================ */
+  /*
+  --bg:         #041008;
+  --face-outer: #071a0c;
+  --accent:     #39ff14;
+  --hand:       #e0ffe8;
+  --text-clock: #b0ffc0;
+  --title:      #d0ffe0;
+  */
+  /* ================================================================ */
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  background: var(--bg);
+  font-family: "Limelight", serif;
+}
+
+.clock-title {
+  margin: 0;
+  font-family: "Limelight", serif;
+  font-size: clamp(1.8rem, 5vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: var(--title);
+}
+
+.clock {
+  width: min(65vmin, 440px);
+  height: min(65vmin, 440px);
+}
+
+/* ---- SVG fills via CSS ---- */
+.face-base   { fill: var(--face-outer); }
+.face-accent { fill: var(--accent); }
+.face-center { fill: var(--face-outer); }
+
+.clock-face text {
+  fill: var(--text-clock);
+  font-family: "Limelight", serif;
+}
+
+.clock-face line {
+  stroke: var(--text-clock);
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+/* ---- hands ---- */
+.hand-hr rect { fill: var(--hand); }
+.hand-mn rect { fill: var(--hand); }
+
+.hand-sc rect    { fill: var(--accent); }
+.hand-sc circle  {
+  fill: var(--face-outer);
+  stroke: var(--accent);
+  stroke-width: 0.8;
+}

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gold Medal Clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Limelight&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h1 class="clock-title">Keep calm and &lt;code/&gt;</h1>
+
+    <svg class="clock" viewBox="0 0 100 100">
+      <defs>
+        <filter id="f-drop">
+          <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.5" />
+        </filter>
+        <filter id="f-glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.7" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
+        <!-- arc mask: white = dark overlay visible, black wedge = accent shows through -->
+        <mask id="hour-arc">
+          <g transform="translate(50 50)">
+            <g class="arc-hand">
+              <circle cx="0" cy="0" r="50" fill="#fff" />
+              <path d="M 0 -50 v 50 l 28.86 -50" fill="#000" />
+            </g>
+          </g>
+        </mask>
+      </defs>
+
+      <!-- outer base ring -->
+      <circle class="face-base" cx="50" cy="50" r="46" filter="url(#f-drop)" />
+
+      <!-- accent arc circle (full; masked below to reveal just the hour arc) -->
+      <circle class="face-accent" cx="50" cy="50" r="42" />
+
+      <!-- numbers + tick marks — populated by script.js -->
+      <g
+        class="clock-face"
+        transform="translate(50 50)"
+        text-anchor="middle"
+        dominant-baseline="middle"
+      ></g>
+
+      <!-- dark overlay with arc cutout — covers accent except for the hour progress slice -->
+      <circle class="face-base" mask="url(#hour-arc)" cx="50" cy="50" r="50" />
+
+      <!-- center base knob (sits below hands) -->
+      <circle class="face-center" cx="50" cy="50" r="5" />
+
+      <!-- three hands -->
+      <g class="hands" transform="translate(50 50)">
+        <g class="hand-hr">
+          <rect x="-2.4" y="-20" width="4.8" height="28" rx="2.4" />
+        </g>
+        <g class="hand-mn">
+          <rect x="-1.8" y="-33" width="3.6" height="44" rx="1.8" />
+        </g>
+        <g class="hand-sc">
+          <rect x="-0.7" y="-38" width="1.4" height="50" rx="0.7" />
+          <!-- center dot sits on very top -->
+          <circle cx="0" cy="0" r="2.5" />
+        </g>
+      </g>
+    </svg>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

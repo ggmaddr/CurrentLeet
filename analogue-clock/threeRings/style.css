@@ -1,10 +1,25 @@
+/* dark coding color palette */
+/* 
 :root {
-	/* dark coding color palette */
 	--background: rgb(27, 0, 29);
 	--color-text: #5bff46;
 	--hours-color: rgb(0, 145, 255);
 	--minutes-color: yellow;
 	--seconds-color: red;
+} */
+
+:root {
+	--thistle: #cdb4dbff;
+	--pastel-petal: #ffc8ddff;
+	--baby-pink: #ffafccff;
+	--icy-blue: #bde0feff;
+	--sky-blue: #a2d2ffff;
+
+	--background: #f4f1de;
+	--color-text: #3d405b;
+	--hours-color: #e07a5f;
+	--minutes-color: #81b29a;
+	--seconds-color: #ffae00;
 }
 body {
 	margin: 0;
@@ -46,7 +61,7 @@ body {
 	justify-items: center;
 	align-items: center;
 	color: var(--color-text);
-	font-size: 3em;
+	font-size: 3.2em;
 	grid-gap: 5px;
 	position: absolute;
 	font-family: 'Varela Round', sans-serif;
