@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Pixodesk SVG (https://pixodesk.com) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" text-rendering="geometricPrecision" shape-rendering="geometricPrecision">
+  <rect fill="#f8f9fa" rx="10" ry="0" width="800" height="380"/>
+  <text fill="#2c3e50" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" xml:space="preserve" x="400" y="30" data-gn-el-type="text" style="white-space:pre"><tspan>Non-constant Transition: Variable Lookback</tspan></text>
+  <text fill="#7f8c8d" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" xml:space="preserve" x="400" y="52" data-gn-el-type="text" style="white-space:pre"><tspan>Example: Longest Increasing Subsequence (LIS)</tspan></text>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="50" y="90" data-gn-el-type="text" style="white-space:pre"><tspan>arr:</tspan></text>
+  <g>
+    <rect fill="#e5e7eb" stroke="#6b7280" stroke-width="2" rx="3" ry="0" x="100" y="70" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="125" y="95" data-gn-el-type="text" style="white-space:pre"><tspan>3</tspan></text>
+    <text fill="#7f8c8d" text-anchor="middle" font-family="monospace" font-size="11" xml:space="preserve" x="125" y="120" data-gn-el-type="text" style="white-space:pre"><tspan>i=0</tspan></text>
+  </g>
+  <g>
+    <rect fill="#e5e7eb" stroke="#6b7280" stroke-width="2" rx="3" ry="0" x="160" y="70" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="185" y="95" data-gn-el-type="text" style="white-space:pre"><tspan>1</tspan></text>
+    <text fill="#7f8c8d" text-anchor="middle" font-family="monospace" font-size="11" xml:space="preserve" x="185" y="120" data-gn-el-type="text" style="white-space:pre"><tspan>i=1</tspan></text>
+  </g>
+  <g>
+    <rect fill="#e5e7eb" stroke="#6b7280" stroke-width="2" rx="3" ry="0" x="220" y="70" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="245" y="95" data-gn-el-type="text" style="white-space:pre"><tspan>4</tspan></text>
+    <text fill="#7f8c8d" text-anchor="middle" font-family="monospace" font-size="11" xml:space="preserve" x="245" y="120" data-gn-el-type="text" style="white-space:pre"><tspan>i=2</tspan></text>
+  </g>
+  <g>
+    <rect fill="#e5e7eb" stroke="#6b7280" stroke-width="2" rx="3" ry="0" x="280" y="70" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="305" y="95" data-gn-el-type="text" style="white-space:pre"><tspan>2</tspan></text>
+    <text fill="#7f8c8d" text-anchor="middle" font-family="monospace" font-size="11" xml:space="preserve" x="305" y="120" data-gn-el-type="text" style="white-space:pre"><tspan>i=3</tspan></text>
+  </g>
+  <g>
+    <rect fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="3" ry="0" x="340" y="70" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="365" y="95" data-gn-el-type="text" style="white-space:pre"><tspan>5</tspan></text>
+    <text fill="#f59e0b" text-anchor="middle" font-family="monospace" font-size="11" xml:space="preserve" x="365" y="120" data-gn-el-type="text" style="white-space:pre"><tspan>i=4</tspan></text>
+  </g>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="50" y="175" data-gn-el-type="text" style="white-space:pre"><tspan>dp:</tspan></text>
+  <g>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="3" ry="0" x="100" y="155" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="125" y="180" data-gn-el-type="text" style="white-space:pre"><tspan>1</tspan></text>
+  </g>
+  <g>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="3" ry="0" x="160" y="155" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="185" y="180" data-gn-el-type="text" style="white-space:pre"><tspan>1</tspan></text>
+  </g>
+  <g>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="3" ry="0" x="220" y="155" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="245" y="180" data-gn-el-type="text" style="white-space:pre"><tspan>2</tspan></text>
+  </g>
+  <g>
+    <rect fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="3" ry="0" x="280" y="155" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="305" y="180" data-gn-el-type="text" style="white-space:pre"><tspan>2</tspan></text>
+  </g>
+  <g>
+    <rect fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="3" ry="0" x="340" y="155" width="50" height="40"/>
+    <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="16" xml:space="preserve" x="365" y="180" data-gn-el-type="text" style="white-space:pre"><tspan>?</tspan></text>
+  </g>
+  <path fill="none" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4 2" d="M125,155C125,145,165,140,245,140C325,140,365,145,365,155"/>
+  <path fill="none" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4 2" d="M185,155C185,148.3333,215,145,275,145C335,145,365,148.3333,365,155"/>
+  <path fill="none" stroke="#3498db" stroke-width="2" d="M245,155C245,150.3333,265,148,305,148C345,148,365,150.3333,365,155"/>
+  <path fill="none" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4 2" d="M305,155C305,151.6667,315,150,335,150C355,150,365,151.6667,365,155"/>
+  <text fill="#10b981" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="125" y="135" data-gn-el-type="text" style="white-space:pre"><tspan>✓</tspan></text>
+  <text fill="#10b981" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="185" y="135" data-gn-el-type="text" style="white-space:pre"><tspan>✓</tspan></text>
+  <text fill="#3498db" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="245" y="135" data-gn-el-type="text" style="white-space:pre"><tspan>✓</tspan></text>
+  <text fill="#10b981" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" xml:space="preserve" x="305" y="135" data-gn-el-type="text" style="white-space:pre"><tspan>✓</tspan></text>
+  <rect fill="#ffffff" stroke="#dee2e6" stroke-width="2" rx="8" ry="0" x="430" y="70" width="340" height="130"/>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="450" y="95" data-gn-el-type="text" style="white-space:pre"><tspan>Computing dp[4]:</tspan></text>
+  <text fill="#2c3e50" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="450" y="118" data-gn-el-type="text" style="white-space:pre"><tspan>Check all j where arr[j] &lt; arr[4]=5:</tspan></text>
+  <text fill="#7f8c8d" font-family="monospace" font-size="11" xml:space="preserve" x="460" y="140" data-gn-el-type="text" style="white-space:pre"><tspan>j=0: arr[0]=3 &lt; 5 ✓ dp[0]+1 = 2</tspan></text>
+  <text fill="#7f8c8d" font-family="monospace" font-size="11" xml:space="preserve" x="460" y="157" data-gn-el-type="text" style="white-space:pre"><tspan>j=1: arr[1]=1 &lt; 5 ✓ dp[1]+1 = 2</tspan></text>
+  <text fill="#3498db" font-family="monospace" font-size="11" xml:space="preserve" x="460" y="174" data-gn-el-type="text" style="white-space:pre"><tspan>j=2: arr[2]=4 &lt; 5 ✓ dp[2]+1 = 3 ← best</tspan></text>
+  <text fill="#7f8c8d" font-family="monospace" font-size="11" xml:space="preserve" x="460" y="191" data-gn-el-type="text" style="white-space:pre"><tspan>j=3: arr[3]=2 &lt; 5 ✓ dp[3]+1 = 3</tspan></text>
+  <rect fill="#fdf2f2" stroke="#e74c3c" stroke-width="2" rx="6" ry="0" x="34.9737" y="220" width="430.8999" height="50"/>
+  <text fill="#2c3e50" text-anchor="middle" font-family="monospace" font-size="13" xml:space="preserve" x="250" y="250" data-gn-el-type="text" style="white-space:pre"><tspan>dp[i] = max(dp[j]+1) for all j&lt;i where arr[j]&lt;arr[i]</tspan></text>
+  <rect fill="#fff3cd" stroke="#f59e0b" stroke-width="2" rx="6" ry="0" x="501.7781" y="220" width="268.2219" height="50"/>
+  <text fill="#2c3e50" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" transform="translate(36, 0)" x="600" y="242" data-gn-el-type="text" style="white-space:pre"><tspan>O(n²) total time</tspan></text>
+  <text fill="#7f8c8d" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" transform="translate(36, 0)" x="600" y="260" data-gn-el-type="text" style="white-space:pre"><tspan>Each state checks up to n predecessors</tspan></text>
+  <rect fill="#e3f2fd" stroke="#3498db" stroke-width="2" rx="8" ry="0" x="100" y="290" width="670" height="70"/>
+  <text fill="#2c3e50" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" xml:space="preserve" x="435" y="315" data-gn-el-type="text" style="white-space:pre"><tspan>Key Difference from Constant Transition</tspan></text>
+  <text fill="#2c3e50" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" xml:space="preserve" x="435" y="338" data-gn-el-type="text" style="white-space:pre"><tspan>Cannot predict which previous states matter — must check all valid predecessors</tspan></text>
+</svg>

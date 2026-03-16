@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #111; color: #e0e0e0; font-family: 'Courier New', monospace; padding: 24px; }
+  h2 { color: #FFD700; font-size: 14px; margin-bottom: 8px; letter-spacing: 1px; }
+  .inputs { display: flex; gap: 12px; margin-bottom: 24px; align-items: center; }
+  input { background: #222; border: 1px solid #444; color: #FFD700; padding: 6px 10px; font-family: 'Courier New', monospace; font-size: 14px; width: 200px; border-radius: 3px; }
+  button { background: #FFD700; color: #111; border: none; padding: 7px 16px; font-family: 'Courier New', monospace; font-size: 13px; font-weight: bold; cursor: pointer; border-radius: 3px; }
+  button:hover { background: #ffe84d; }
+  .result-bar { margin-bottom: 20px; font-size: 13px; }
+  .result-bar span { color: #FFD700; font-weight: bold; }
+  .tables { display: flex; gap: 32px; flex-wrap: wrap; }
+  .table-wrap { }
+  table { border-collapse: collapse; }
+  td { width: 38px; height: 36px; text-align: center; font-size: 13px; border: 1px solid #2a2a2a; position: relative; }
+  td.header { color: #888; font-size: 12px; border: none; background: transparent; }
+  td.header-char { color: #FFD700; font-weight: bold; font-size: 14px; border: none; }
+  td.path { background: #1a2a1a; border-color: #3a5a3a; }
+  td.match { background: #1a2a3a; border-color: #FFD700 !important; border-width: 2px !important; }
+  td.match .val { color: #FFD700; font-weight: bold; font-size: 15px; }
+  td.top-move { background: #2a1a2a; border-color: #b06ef0 !important; border-width: 2px !important; }
+  td.top-move .val { color: #c084fc; font-weight: bold; }
+  td.left-move { background: #1a2a2a; border-color: #5eead4 !important; border-width: 2px !important; }
+  td.left-move .val { color: #5eead4; font-weight: bold; }
+  td.start { background: #2a2a00; border-color: #FFD700 !important; border-width: 2px !important; }
+  .val { display: block; line-height: 36px; }
+  .step-num { position: absolute; top: 1px; right: 2px; font-size: 8px; color: #FFD700; opacity: 0.8; }
+  .legend { display: flex; gap: 16px; margin-bottom: 16px; font-size: 11px; flex-wrap: wrap; }
+  .leg { display: flex; align-items: center; gap: 5px; }
+  .leg-box { width: 14px; height: 14px; border-radius: 2px; }
+  .trace-steps { margin-top: 16px; font-size: 12px; }
+  .trace-steps span { display: inline-block; margin: 2px 4px; padding: 2px 7px; border-radius: 3px; }
+  .t-match { background: #1a2a3a; color: #FFD700; border: 1px solid #FFD700; }
+  .t-top   { background: #2a1a2a; color: #c084fc; border: 1px solid #c084fc; }
+  .t-left  { background: #1a2a2a; color: #5eead4; border: 1px solid #5eead4; }
+  .scs-result { font-size: 15px; letter-spacing: 2px; }
+  .scs-result .lcs-char { color: #FFD700; font-weight: bold; text-decoration: underline; }
+  .scs-result .s1-char  { color: #c084fc; }
+  .scs-result .s2-char  { color: #5eead4; }
+  .note { color: #666; font-size: 11px; margin-top: 6px; }
+  .same-path-note { color: #4ec94e; font-size: 12px; margin: 12px 0; padding: 8px 12px; border: 1px solid #4ec94e; border-radius: 3px; display: inline-block; }
+</style>
+</head>
+<body>
+
+<div class="inputs">
+  <input id="s1" value="dcxabub" placeholder="str1"/>
+  <input id="s2" value="dabcacb" placeholder="str2"/>
+  <button onclick="run()">Visualize</button>
+</div>
+
+<div class="legend">
+  <div class="leg"><div class="leg-box" style="background:#1a2a3a;border:1px solid #FFD700"></div> match (take once, i-- j--)</div>
+  <div class="leg"><div class="leg-box" style="background:#2a1a2a;border:1px solid #c084fc"></div> mismatch → take str1[i], go ↑</div>
+  <div class="leg"><div class="leg-box" style="background:#1a2a2a;border:1px solid #5eead4"></div> mismatch → take str2[j], go ←</div>
+</div>
+
+<div id="result-bar" class="result-bar"></div>
+<div class="same-path-note" id="path-note"></div>
+
+<div class="tables" id="tables"></div>
+
+<div class="trace-steps" id="trace"></div>
+
+<script>
+function compute(s1, s2) {
+  const n = s1.length, m = s2.length;
+
+  // LCS table
+  const lcs = Array.from({length:n+1}, ()=>new Array(m+1).fill(0));
+  for (let i=1;i<=n;i++) for (let j=1;j<=m;j++) {
+    if (s1[i-1]===s2[j-1]) lcs[i][j]=lcs[i-1][j-1]+1;
+    else lcs[i][j]=Math.max(lcs[i-1][j],lcs[i][j-1]);
+  }
+
+  // SCS table
+  const scs = Array.from({length:n+1}, ()=>new Array(m+1).fill(0));
+  for (let i=0;i<=n;i++) scs[i][0]=i;
+  for (let j=0;j<=m;j++) scs[0][j]=j;
+  for (let i=1;i<=n;i++) for (let j=1;j<=m;j++) {
+    if (s1[i-1]===s2[j-1]) scs[i][j]=scs[i-1][j-1]+1;
+    else scs[i][j]=Math.min(scs[i-1][j],scs[i][j-1])+1;
+  }
+
+  // Traceback (same path decision on both tables)
+  const pathCells = {}; // key="i,j" value={step, type, char}
+  const trace = [];
+  let i=n, j=m, step=1;
+  while (i>0 && j>0) {
+    if (s1[i-1]===s2[j-1]) {
+      pathCells[`${i},${j}`]={step,type:'match',char:s1[i-1]};
+      trace.push({type:'match',char:s1[i-1],i,j,step});
+      i--; j--; step++;
+    } else if (scs[i-1][j] <= scs[i][j-1]) {
+      pathCells[`${i},${j}`]={step,type:'top',char:s1[i-1]};
+      trace.push({type:'top',char:s1[i-1],i,j,step});
+      i--; step++;
+    } else {
+      pathCells[`${i},${j}`]={step,type:'left',char:s2[j-1]};
+      trace.push({type:'left',char:s2[j-1],i,j,step});
+      j--; step++;
+    }
+  }
+  while (i>0) { pathCells[`${i},${j}`]={step,type:'top',char:s1[i-1]}; trace.push({type:'top',char:s1[i-1],i,j,step}); i--; step++; }
+  while (j>0) { pathCells[`${i},${j}`]={step,type:'left',char:s2[j-1]}; trace.push({type:'left',char:s2[j-1],i,j,step}); j--; step++; }
+
+  const result = trace.slice().reverse().map(x=>x.char).join('');
+  return {lcs, scs, pathCells, trace, result, n, m};
+}
+
+function makeTable(title, grid, s1, s2, pathCells, n, m) {
+  let h = `<div class="table-wrap"><h2>${title}</h2><table>`;
+  // header row
+  h += '<tr><td class="header"></td><td class="header"></td>';
+  h += '<td class="header-char">""</td>';
+  for (let j=0;j<m;j++) h += `<td class="header-char">${s2[j]}</td>`;
+  h += '</tr>';
+  // col index
+  h += '<tr><td class="header"></td><td class="header"></td>';
+  for (let j=0;j<=m;j++) h += `<td class="header" style="font-size:9px;color:#444">${j}</td>`;
+  h += '</tr>';
+
+  for (let i=0;i<=n;i++) {
+    h += '<tr>';
+    h += `<td class="header-char">${i===0?'""':s1[i-1]}</td>`;
+    h += `<td class="header" style="font-size:9px;color:#444">${i}</td>`;
+    for (let j=0;j<=m;j++) {
+      const key = `${i},${j}`;
+      const p = pathCells[key];
+      let cls = '';
+      let stepNum = '';
+      if (p) {
+        if (p.type==='match') cls='match';
+        else if (p.type==='top') cls='top-move';
+        else cls='left-move';
+        stepNum = `<span class="step-num">${p.step}</span>`;
+      }
+      if (i===0&&j===0&&pathCells['0,0']) cls='start';
+      h += `<td class="${cls}">${stepNum}<span class="val">${grid[i][j]}</span></td>`;
+    }
+    h += '</tr>';
+  }
+  h += '</table></div>';
+  return h;
+}
+
+function run() {
+  const s1 = document.getElementById('s1').value.trim();
+  const s2 = document.getElementById('s2').value.trim();
+  const {lcs, scs, pathCells, trace, result, n, m} = compute(s1, s2);
+
+  document.getElementById('result-bar').innerHTML =
+    `LCS length: <span>${lcs[n][m]}</span> &nbsp;&nbsp; SCS: <span class="scs-result">${
+      trace.slice().reverse().map(x=>{
+        if(x.type==='match') return `<span class="lcs-char">${x.char}</span>`;
+        if(x.type==='top')   return `<span class="s1-char">${x.char}</span>`;
+        return `<span class="s2-char">${x.char}</span>`;
+      }).join('')
+    }</span> &nbsp;&nbsp; len: <span>${result.length}</span>`;
+
+  document.getElementById('path-note').textContent =
+    '✓ The traceback path is IDENTICAL on both tables — LCS table and SCS table follow the same decisions';
+
+  const t = document.getElementById('tables');
+  t.innerHTML =
+    makeTable('LCS table  (dp[i][j] = longest common subseq length)', lcs, s1, s2, pathCells, n, m) +
+    makeTable('SCS table  (dp[i][j] = shortest common superseq length)', scs, s1, s2, pathCells, n, m);
+
+  // trace steps
+  const tc = document.getElementById('trace');
+  tc.innerHTML = '<div style="color:#888;margin-bottom:6px;font-size:11px;">traceback steps (start → end, reversed to build result):</div>' +
+    trace.map((x,idx)=>{
+      const cls = x.type==='match'?'t-match':x.type==='top'?'t-top':'t-left';
+      const desc = x.type==='match'?`match '${x.char}'`:x.type==='top'?`↑ take str1[${x.i-1}]='${x.char}'`:`← take str2[${x.j-1}]='${x.char}'`;
+      return `<span class="${cls}">${x.step}. ${desc}</span>`;
+    }).join('') +
+    `<div style="margin-top:10px">→ reversed: <span style="color:#FFD700;font-size:14px;letter-spacing:2px">${result}</span></div>`;
+}
+
+run();
+</script>
+</body>
+</html>
