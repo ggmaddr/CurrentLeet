@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visit Every Node DP Visualizer</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #131a2e;
+      --panel-2: #1a2340;
+      --text: #e8edf8;
+      --muted: #98a2bf;
+      --accent: #7dd3fc;
+      --repeat: #f59e0b;
+      --leaf: #34d399;
+      --edge: #5b6b9b;
+      --node: #25345c;
+      --node-border: #4f679d;
+      --best: #f472b6;
+      --bad: #ef4444;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .app {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      min-height: 100vh;
+    }
+    .sidebar {
+      background: linear-gradient(180deg, var(--panel), #0f1528);
+      border-right: 1px solid #253154;
+      padding: 20px;
+      overflow: auto;
+    }
+    .main {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-width: 0;
+    }
+    h1 { font-size: 24px; margin: 0 0 10px; }
+    h2 { font-size: 16px; margin: 22px 0 10px; color: var(--accent); }
+    p, li, label, button, input, textarea { font-size: 14px; line-height: 1.45; }
+    .muted { color: var(--muted); }
+    .controls { display: grid; gap: 12px; margin-top: 16px; }
+    .row { display: grid; gap: 6px; }
+    button, input[type="number"], textarea {
+      width: 100%;
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid #2d3b65;
+      padding: 10px 12px;
+      border-radius: 10px;
+    }
+    textarea {
+      min-height: 190px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13px;
+    }
+    button {
+      cursor: pointer;
+      font-weight: 600;
+      background: #1f2b4d;
+    }
+    button:hover { filter: brightness(1.08); }
+    .legend { display: grid; gap: 8px; margin-top: 14px; }
+    .legend-item { display: flex; align-items: center; gap: 10px; color: var(--muted); }
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .topbar {
+      padding: 14px 18px;
+      border-bottom: 1px solid #253154;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(11,16,32,0.75);
+      backdrop-filter: blur(8px);
+    }
+    .pill {
+      background: #121a31;
+      border: 1px solid #2a3760;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 6px 10px;
+    }
+    .canvas-wrap {
+      overflow: auto;
+      position: relative;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    svg { display: block; min-width: 100%; min-height: 100%; }
+    .edge { stroke: var(--edge); stroke-width: 2; fill: none; opacity: 0.9; }
+    .edge.repeat { stroke: var(--repeat); stroke-dasharray: 6 6; opacity: 0; }
+    .edge.repeat.active { opacity: 0.98; }
+    .edge.best { stroke: var(--best); stroke-width: 3; }
+    .edge.impossible { stroke: var(--bad); stroke-dasharray: 3 5; opacity: 0.45; }
+    .edge-label { font-size: 12px; fill: #c6d3f4; }
+    .edge-label.repeat-label { opacity: 0; }
+    .edge-label.repeat-label.active { opacity: 1; }
+    .node-box { fill: var(--node); stroke: var(--node-border); stroke-width: 1.5; rx: 12; }
+    .node-box.repeat { fill: rgba(245, 158, 11, 0.16); stroke: var(--repeat); stroke-width: 2; cursor: pointer; }
+    .node-box.leaf { fill: rgba(52, 211, 153, 0.14); stroke: var(--leaf); stroke-width: 2; }
+    .node-box.best { fill: rgba(244, 114, 182, 0.16); stroke: var(--best); stroke-width: 2; }
+    .node-box.dead { fill: rgba(239, 68, 68, 0.12); stroke: var(--bad); stroke-width: 2; }
+    .node-title { font-size: 14px; font-weight: 700; fill: var(--text); }
+    .node-sub { font-size: 12px; fill: #b2bddb; }
+    .hint {
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid #293760;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+    }
+    code {
+      color: #c7f0ff;
+      background: rgba(255,255,255,0.06);
+      padding: 1px 5px;
+      border-radius: 6px;
+    }
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid #253154; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h1>Visit Every Node DP Visualizer</h1>
+      <p class="muted">
+        Visualize only the <strong>DP subproblems</strong> for this weighted graph problem, matching the exact memoized recursion <code>dp(mask, node)</code>.
+        Repeated states are highlighted only when the exact same <code>(mask, node)</code> is requested again, and clicking a repeated state toggles its incoming repeated dashed edges.
+      </p>
+
+      <div class="controls">
+        <div class="row">
+          <label for="graphInput">Graph adjacency matrix (JSON)</label>
+          <textarea id="graphInput">[
+  [0, 4, 7, 3, 6],
+  [5, 0, 2, 6, 4],
+  [3, 5, 0, 7, 2],
+  [6, 2, 4, 0, 5],
+  [4, 7, 3, 2, 0]
+]</textarea>
+        </div>
+
+        <div class="row">
+          <label for="maxDepthInput">Expand levels</label>
+          <input id="maxDepthInput" type="number" min="1" max="5" value="4" />
+        </div>
+
+        <button id="renderBtn">Render</button>
+      </div>
+
+      <h2>State</h2>
+      <ul class="muted">
+        <li><code>mask</code>: visited nodes</li>
+        <li><code>node</code>: where you are now</li>
+        <li><code>dp(mask, node)</code>: min cost to finish from here</li>
+      </ul>
+
+      <h2>Legend</h2>
+      <div class="legend">
+        <div class="legend-item"><span class="swatch" style="background:#25345c;border-color:#4f679d"></span> normal state</div>
+        <div class="legend-item"><span class="swatch" style="background:rgba(245,158,11,.4);border-color:#f59e0b"></span> repeated state</div>
+        <div class="legend-item"><span class="swatch" style="background:rgba(52,211,153,.4);border-color:#34d399"></span> all nodes visited</div>
+        <div class="legend-item"><span class="swatch" style="background:rgba(244,114,182,.4);border-color:#f472b6"></span> on best answer path</div>
+        <div class="legend-item"><span class="swatch" style="background:rgba(239,68,68,.4);border-color:#ef4444"></span> dead / impossible state</div>
+      </div>
+
+      <div class="hint">
+        Only the exact same <code>(mask, node)</code> counts as a repeated subproblem.<br />
+        Same <code>mask</code> with different <code>node</code> is <strong>not</strong> repeated.<br />
+        Start state matches your code: <code>dp(00001, 0)</code>.<br />
+        Click a <strong>repeated</strong> state box to toggle the dashed incoming edges that also request that same DP state.
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="pill" id="statsStates">Unique states: 0</div>
+        <div class="pill" id="statsRepeats">Repeated requests: 0</div>
+        <div class="pill" id="statsAnswer">Answer: -</div>
+      </div>
+      <div class="canvas-wrap">
+        <svg id="svg" width="1800" height="1100" viewBox="0 0 1800 1100"></svg>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const svg = document.getElementById('svg');
+    const graphInput = document.getElementById('graphInput');
+    const maxDepthInput = document.getElementById('maxDepthInput');
+    const renderBtn = document.getElementById('renderBtn');
+    const statsStates = document.getElementById('statsStates');
+    const statsRepeats = document.getElementById('statsRepeats');
+    const statsAnswer = document.getElementById('statsAnswer');
+
+    function popcount(x) {
+      let c = 0;
+      while (x) {
+        x &= x - 1;
+        c++;
+      }
+      return c;
+    }
+
+    function maskStr(mask, n) {
+      return mask.toString(2).padStart(n, '0');
+    }
+
+    function visitedList(mask, n) {
+      const arr = [];
+      for (let i = 0; i < n; i++) if (mask & (1 << i)) arr.push(i);
+      return arr.join(',');
+    }
+
+    function parseGraph() {
+      const g = JSON.parse(graphInput.value);
+      if (!Array.isArray(g) || g.length < 2 || g.length > 6) throw new Error('Graph must be a square matrix with 2..6 nodes');
+      const n = g.length;
+      for (const row of g) {
+        if (!Array.isArray(row) || row.length !== n) throw new Error('Graph must be square');
+        for (const x of row) if (typeof x !== 'number' || x < 0) throw new Error('Weights must be non-negative numbers');
+      }
+      return g;
+    }
+
+    function solveDP(graph) {
+      const n = graph.length;
+      const FULL = (1 << n) - 1;
+      const memo = new Map();
+      const choice = new Map();
+      const key = (mask, node) => `${mask}|${node}`;
+
+      function dp(mask, node) {
+        const k = key(mask, node);
+        if (memo.has(k)) return memo.get(k);
+        if (mask === FULL) {
+          memo.set(k, 0);
+          return 0;
+        }
+        let best = Infinity;
+        let bestNei = -1;
+        for (let nei = 0; nei < n; nei++) {
+          const w = graph[node][nei];
+          if (w === 0) continue;
+          if (mask & (1 << nei)) continue;
+          const newMask = mask | (1 << nei);
+          const val = w + dp(newMask, nei);
+          if (val < best) {
+            best = val;
+            bestNei = nei;
+          }
+        }
+        memo.set(k, best);
+        if (bestNei !== -1) choice.set(k, bestNei);
+        return best;
+      }
+
+      const answer = dp(1, 0);
+      const bestStates = new Set();
+      const bestEdges = new Set();
+      if (Number.isFinite(answer)) {
+        let mask = 1;
+        let node = 0;
+        while (true) {
+          const k = key(mask, node);
+          bestStates.add(k);
+          if (mask === FULL) break;
+          const nei = choice.get(k);
+          if (nei == null) break;
+          const newMask = mask | (1 << nei);
+          bestEdges.add(`${mask}|${node}|${newMask}|${nei}`);
+          mask = newMask;
+          node = nei;
+        }
+      }
+      return { answer, memo, bestStates, bestEdges };
+    }
+
+    function buildCollapsedView(graph, maxDepth) {
+      const n = graph.length;
+      const FULL = (1 << n) - 1;
+      const { answer, memo, bestStates, bestEdges } = solveDP(graph);
+      const key = (mask, node) => `${mask}|${node}`;
+      const levels = Array.from({ length: n }, () => []);
+      const nodesByKey = new Map();
+      const requestCount = new Map();
+      const edges = [];
+
+      function bruteCount(mask, node) {
+        const k = key(mask, node);
+        if (requestCount.has(k)) return requestCount.get(k);
+        if (mask === 1 && node === 0) {
+          requestCount.set(k, 1);
+          return 1;
+        }
+        if ((mask & 1) === 0 || (mask & (1 << node)) === 0) {
+          requestCount.set(k, 0);
+          return 0;
+        }
+        const prevMask = mask ^ (1 << node);
+        if (prevMask === mask) {
+          requestCount.set(k, 0);
+          return 0;
+        }
+        let total = 0;
+        for (let prev = 0; prev < n; prev++) {
+          if ((prevMask & (1 << prev)) === 0) continue;
+          if (graph[prev][node] === 0) continue;
+          total += bruteCount(prevMask, prev);
+        }
+        requestCount.set(k, total);
+        return total;
+      }
+
+      for (let mask = 1; mask <= FULL; mask++) {
+        if ((mask & 1) === 0) continue;
+        const depth = popcount(mask) - 1;
+        if (depth > maxDepth) continue;
+        for (let node = 0; node < n; node++) {
+          if ((mask & (1 << node)) === 0) continue;
+          const req = bruteCount(mask, node);
+          if (req === 0) continue;
+          const k = key(mask, node);
+          const obj = { node, mask, depth, key: k, x: 0, y: 0 };
+          nodesByKey.set(k, obj);
+          levels[depth].push(obj);
+        }
+      }
+
+      for (const obj of nodesByKey.values()) {
+        if (obj.depth >= maxDepth || obj.mask === FULL) continue;
+        for (let nei = 0; nei < n; nei++) {
+          const w = graph[obj.node][nei];
+          if (w === 0) continue;
+          if (obj.mask & (1 << nei)) continue;
+          const newMask = obj.mask | (1 << nei);
+          const nk = key(newMask, nei);
+          if (!nodesByKey.has(nk)) continue;
+          edges.push({
+            from: obj,
+            to: nodesByKey.get(nk),
+            weight: w,
+            repeat: (requestCount.get(nk) || 0) > 1,
+            best: bestEdges.has(`${obj.mask}|${obj.node}|${newMask}|${nei}`),
+            impossible: !Number.isFinite(memo.get(nk)),
+          });
+        }
+      }
+
+      const colGapX = 250;
+      const rowGapY = 106;
+      levels.forEach((level, depth) => {
+        level.sort((a, b) => a.node - b.node || a.mask - b.mask);
+        const totalH = Math.max(0, level.length - 1) * rowGapY;
+        const startY = 120 + Math.max(0, (900 - totalH) / 2);
+        level.forEach((nodeObj, idx) => {
+          nodeObj.x = 150 + depth * colGapX;
+          nodeObj.y = startY + idx * rowGapY;
+        });
+      });
+
+      const width = Math.max(1800, 320 + Math.min(maxDepth + 1, n) * colGapX);
+      const height = Math.max(1100, ...[...nodesByKey.values()].map(v => v.y + 120));
+      return { nodes: [...nodesByKey.values()], edges, requestCount, width, height, answer, bestStates, memo };
+    }
+
+    function line(x1, y1, x2, y2, cls) {
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const midX = (x1 + x2) / 2;
+      p.setAttribute('d', `M ${x1} ${y1} C ${midX} ${y1}, ${midX} ${y2}, ${x2} ${y2}`);
+      p.setAttribute('class', cls);
+      svg.appendChild(p);
+      return p;
+    }
+
+    function text(x, y, content, cls, anchor = 'middle') {
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', x);
+      t.setAttribute('y', y);
+      t.setAttribute('class', cls);
+      t.setAttribute('text-anchor', anchor);
+      t.textContent = content;
+      svg.appendChild(t);
+      return t;
+    }
+
+    function rect(x, y, w, h, cls) {
+      const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      r.setAttribute('x', x);
+      r.setAttribute('y', y);
+      r.setAttribute('width', w);
+      r.setAttribute('height', h);
+      r.setAttribute('class', cls);
+      svg.appendChild(r);
+      return r;
+    }
+
+    function render() {
+      try {
+        const graph = parseGraph();
+        const n = graph.length;
+        maxDepthInput.max = String(n - 1);
+        const maxDepth = Math.max(1, Math.min(n - 1, Number(maxDepthInput.value) || (n - 1)));
+        maxDepthInput.value = String(maxDepth);
+
+        const { nodes, edges, requestCount, width, height, answer, bestStates, memo } = buildCollapsedView(graph, maxDepth);
+        const boxW = 220;
+        const boxH = 70;
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        svg.setAttribute('width', width);
+        svg.setAttribute('height', height);
+        svg.innerHTML = '';
+
+        const repeatEdgeElsByState = new Map();
+        const repeatLabelElsByState = new Map();
+        const pushList = (map, key, value) => {
+          if (!map.has(key)) map.set(key, []);
+          map.get(key).push(value);
+        };
+
+        edges.forEach(e => {
+          const cls = `edge ${e.repeat ? 'repeat' : ''} ${e.best ? 'best' : ''} ${e.impossible ? 'impossible' : ''}`;
+          const edgeEl = line(e.from.x + boxW / 2 - 10, e.from.y, e.to.x - boxW / 2 + 10, e.to.y, cls);
+          const labelCls = `edge-label ${e.repeat ? 'repeat-label' : ''}`;
+          const labelEl = text((e.from.x + e.to.x) / 2, (e.from.y + e.to.y) / 2 - 8, `${e.from.node}->${e.to.node} (${e.weight})`, labelCls);
+          if (e.repeat) {
+            pushList(repeatEdgeElsByState, e.to.key, edgeEl);
+            pushList(repeatLabelElsByState, e.to.key, labelEl);
+          }
+        });
+
+        nodes.forEach(node => {
+          const req = requestCount.get(node.key) || 0;
+          const isRepeat = req > 1;
+          const isLeaf = popcount(node.mask) === n;
+          const isBest = bestStates.has(node.key);
+          const val = memo.get(node.key);
+          const isDead = val === Infinity;
+          const cls = `node-box ${isRepeat ? 'repeat' : ''} ${isLeaf ? 'leaf' : ''} ${isBest ? 'best' : ''} ${isDead ? 'dead' : ''}`;
+          const box = rect(node.x - boxW / 2, node.y - boxH / 2, boxW, boxH, cls);
+          text(node.x, node.y - 12, `dp(${maskStr(node.mask, n)}, ${node.node})`, 'node-title');
+          text(node.x, node.y + 8, `requests=${req}  finish=${isDead ? 'IMP' : val}`, 'node-sub');
+          text(node.x, node.y + 24, `visited={${visitedList(node.mask, n)}}`, 'node-sub');
+          if (isRepeat) {
+            let shown = false;
+            box.addEventListener('click', () => {
+              shown = !shown;
+              (repeatEdgeElsByState.get(node.key) || []).forEach(el => el.classList.toggle('active', shown));
+              (repeatLabelElsByState.get(node.key) || []).forEach(el => el.classList.toggle('active', shown));
+            });
+          }
+        });
+
+        const repeatRequests = [...requestCount.values()].reduce((a, c) => a + Math.max(0, c - 1), 0);
+        statsStates.textContent = `Unique states: ${nodes.length}`;
+        statsRepeats.textContent = `Repeated requests: ${repeatRequests}`;
+        statsAnswer.textContent = `Answer: ${Number.isFinite(answer) ? answer : -1}`;
+      } catch (err) {
+        svg.innerHTML = '';
+        statsStates.textContent = 'Unique states: error';
+        statsRepeats.textContent = 'Repeated requests: error';
+        statsAnswer.textContent = `Answer: ${err.message}`;
+      }
+    }
+
+    renderBtn.addEventListener('click', render);
+    maxDepthInput.addEventListener('change', render);
+    graphInput.addEventListener('change', render);
+    render();
+  </script>
+</body>
+</html>

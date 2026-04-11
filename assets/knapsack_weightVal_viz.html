@@ -1,0 +1,200 @@
+
+<div style="padding: 1rem 0;">
+
+<div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1rem;">
+  <div>
+    <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">weights</div>
+    <input id="iw" value="2,3,4,5" style="width:160px; font-family: var(--font-mono);" />
+  </div>
+  <div>
+    <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">values</div>
+    <input id="iv" value="3,4,5,6" style="width:160px; font-family: var(--font-mono);" />
+  </div>
+  <div>
+    <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">max weight</div>
+    <input id="imw" value="5" style="width:60px; font-family: var(--font-mono);" type="number" min="1" max="20" />
+  </div>
+  <button onclick="run()">build ↗</button>
+</div>
+
+<div id="info" style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 12px; font-family: var(--font-mono);"></div>
+
+<div style="overflow-x: auto;">
+  <canvas id="c"></canvas>
+</div>
+
+<div style="margin-top: 14px; display: flex; gap: 20px; flex-wrap: wrap; font-size: 12px; color: var(--color-text-secondary); font-family: var(--font-mono);">
+  <span><span style="display:inline-block;width:12px;height:12px;background:#3c3489;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>taken item (diagonal)</span>
+  <span><span style="display:inline-block;width:12px;height:12px;background:#085041;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>skipped item (top)</span>
+  <span><span style="display:inline-block;width:12px;height:12px;background:#3C3489;opacity:0.3;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>optimal path</span>
+</div>
+</div>
+
+<script>
+function run() {
+  const weights = document.getElementById('iw').value.split(',').map(Number);
+  const values  = document.getElementById('iv').value.split(',').map(Number);
+  const W       = parseInt(document.getElementById('imw').value);
+  const n = weights.length;
+  if (weights.length !== values.length) {
+    document.getElementById('info').textContent = 'weights and values must have same length';
+    return;
+  }
+
+  const dp = Array.from({length: n+1}, () => new Array(W+1).fill(0));
+  for (let i = 1; i <= n; i++) {
+    for (let w = 0; w <= W; w++) {
+      dp[i][w] = dp[i-1][w];
+      if (weights[i-1] <= w) {
+        dp[i][w] = Math.max(dp[i][w], dp[i-1][w - weights[i-1]] + values[i-1]);
+      }
+    }
+  }
+
+  const ans = dp[n][W];
+  const takenItems = [];
+  let wi = W;
+  for (let i = n; i >= 1; i--) {
+    if (dp[i][wi] !== dp[i-1][wi]) {
+      takenItems.push(i-1);
+      wi -= weights[i-1];
+    }
+  }
+
+  const pathCells = new Set();
+  wi = W;
+  for (let i = n; i >= 1; i--) {
+    pathCells.add(`${i},${wi}`);
+    if (dp[i][wi] !== dp[i-1][wi]) {
+      wi -= weights[i-1];
+    }
+  }
+  pathCells.add(`0,${wi}`);
+
+  document.getElementById('info').textContent =
+    `max value = ${ans}  |  items taken: [${takenItems.map(i=>`item${i+1}(w=${weights[i]},v=${values[i]})`).join(', ')}]`;
+
+  const canvas = document.getElementById('c');
+  const DPR = window.devicePixelRatio || 1;
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const CW = 52, CH = 46;
+  const padL = 90, padT = 60;
+  const totalW = padL + (W+1)*CW + 20;
+  const totalH = padT + (n+1)*CH + 20;
+
+  canvas.width  = totalW * DPR;
+  canvas.height = totalH * DPR;
+  canvas.style.width  = totalW + 'px';
+  canvas.style.height = totalH + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+  ctx.clearRect(0, 0, totalW, totalH);
+
+  const textPri  = isDark ? '#e5e5e5' : '#1a1a1a';
+  const textSec  = isDark ? '#888' : '#aaa';
+  const border   = isDark ? '#444' : '#ddd';
+  const cellBg   = isDark ? '#1e1e1e' : '#fafafa';
+
+  const purpleFill   = isDark ? '#26215C' : '#EEEDFE';
+  const purpleStroke = isDark ? '#7F77DD' : '#534AB7';
+  const purpleText   = isDark ? '#CECBF6' : '#26215C';
+  const tealFill     = isDark ? '#04342C' : '#E1F5EE';
+  const tealStroke   = isDark ? '#1D9E75' : '#0F6E56';
+  const tealText     = isDark ? '#9FE1CB' : '#04342C';
+  const pathFill     = isDark ? 'rgba(127,119,221,0.18)' : 'rgba(83,74,183,0.10)';
+  const answerFill   = isDark ? '#3c3489' : '#AFA9EC';
+
+  const cx = w => padL + w*CW + CW/2;
+  const cy = i => padT + i*CH + CH/2;
+
+  for (let i = 0; i <= n; i++) {
+    for (let w = 0; w <= W; w++) {
+      const x = padL + w*CW, y = padT + i*CH;
+      const onPath = pathCells.has(`${i},${w}`);
+      const taken = i > 0 && weights[i-1] <= w && dp[i][w] === dp[i-1][w-weights[i-1]] + values[i-1] && dp[i][w] > dp[i-1][w];
+      const skipped = i > 0 && !taken;
+
+      if (onPath) {
+        ctx.fillStyle = taken ? purpleFill : tealFill;
+        ctx.strokeStyle = taken ? purpleStroke : tealStroke;
+        ctx.lineWidth = 2;
+      } else {
+        ctx.fillStyle = cellBg;
+        ctx.strokeStyle = border;
+        ctx.lineWidth = 0.5;
+      }
+      ctx.fillRect(x, y, CW, CH);
+      ctx.strokeRect(x, y, CW, CH);
+
+      ctx.font = `${onPath ? '500' : '400'} 13px var(--font-mono, monospace)`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = onPath ? (taken ? purpleText : tealText) : (dp[i][w] > 0 ? textPri : textSec);
+      ctx.fillText(dp[i][w], cx(w), cy(i));
+    }
+  }
+
+  for (let i = 1; i <= n; i++) {
+    for (let w = 0; w <= W; w++) {
+      const onPath = pathCells.has(`${i},${w}`);
+      if (!onPath) continue;
+      const taken = i > 0 && weights[i-1] <= w && dp[i][w] === dp[i-1][w-weights[i-1]] + values[i-1] && dp[i][w] > dp[i-1][w];
+      const fromW = taken ? w - weights[i-1] : w;
+      const x1 = cx(fromW), y1 = cy(i-1);
+      const x2 = cx(w),     y2 = cy(i);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1 + CH/2 - 2);
+      ctx.lineTo(x2, y2 - CH/2 + 2);
+      ctx.strokeStyle = taken ? purpleStroke : tealStroke;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash(taken ? [] : [3,3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      const ax = x2, ay = y2 - CH/2 + 6;
+      const ang = Math.atan2(ay - (y1+CH/2-2), ax - x1);
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(ax - 7*Math.cos(ang-0.4), ay - 7*Math.sin(ang-0.4));
+      ctx.lineTo(ax - 7*Math.cos(ang+0.4), ay - 7*Math.sin(ang+0.4));
+      ctx.closePath();
+      ctx.fillStyle = taken ? purpleStroke : tealStroke;
+      ctx.fill();
+    }
+  }
+
+  ctx.font = '11px var(--font-mono, monospace)';
+  ctx.fillStyle = textSec;
+  ctx.textAlign = 'center';
+  for (let w = 0; w <= W; w++) {
+    ctx.fillStyle = w === W ? textPri : textSec;
+    ctx.fillText(`w=${w}`, cx(w), padT - 28);
+    ctx.fillStyle = textSec;
+    ctx.fillText(w, cx(w), padT - 14);
+  }
+
+  ctx.textAlign = 'right';
+  for (let i = 0; i <= n; i++) {
+    ctx.fillStyle = textPri;
+    ctx.font = '500 11px var(--font-mono, monospace)';
+    ctx.fillText(i === 0 ? '""' : `item${i}`, padL - 8, cy(i) - 6);
+    ctx.fillStyle = textSec;
+    ctx.font = '10px var(--font-mono, monospace)';
+    if (i > 0) ctx.fillText(`w=${weights[i-1]} v=${values[i-1]}`, padL - 8, cy(i) + 7);
+  }
+
+  ctx.fillStyle = answerFill;
+  const ax = cx(W) - CW/2, ay = cy(n) - CH/2;
+  ctx.fillRect(ax, ay, CW, CH);
+  ctx.strokeStyle = purpleStroke;
+  ctx.lineWidth = 2.5;
+  ctx.strokeRect(ax, ay, CW, CH);
+  ctx.font = 'bold 14px var(--font-mono, monospace)';
+  ctx.fillStyle = isDark ? '#CECBF6' : '#26215C';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(ans, cx(W), cy(n));
+}
+
+run();
+</script>

@@ -1,0 +1,158 @@
+
+<div style="padding: 1rem 0; font-family: var(--font-mono);">
+<div style="display: flex; gap: 12px; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+  <label style="font-size: 13px; color: var(--color-text-secondary);">n =</label>
+  <input type="number" id="nval" value="13" min="1" max="25" style="width: 70px;" />
+  <button onclick="draw()">visualize ↗</button>
+  <span id="ans" style="font-size: 13px; color: var(--color-text-secondary);"></span>
+</div>
+<canvas id="c" style="width:100%; max-width:720px; display:block;"></canvas>
+</div>
+
+<script>
+function draw() {
+  const n = parseInt(document.getElementById('nval').value);
+  if (isNaN(n) || n < 1 || n > 25) return;
+
+  const squares = [];
+  for (let i = 1; i*i <= n; i++) squares.push(i*i);
+
+  const dist = new Array(n+1).fill(-1);
+  const prev = new Array(n+1).fill(-1);
+  dist[n] = 0;
+  const queue = [n];
+  let qi = 0;
+  while (qi < queue.length) {
+    const node = queue[qi++];
+    for (const sq of squares) {
+      const nxt = node - sq;
+      if (nxt >= 0 && dist[nxt] === -1) {
+        dist[nxt] = dist[node] + 1;
+        prev[nxt] = node;
+        queue.push(nxt);
+      }
+    }
+  }
+
+  const ansSteps = dist[0];
+  document.getElementById('ans').textContent = `answer = ${ansSteps} steps`;
+
+  const path = new Set();
+  let cur = 0;
+  while (cur !== -1) { path.add(cur); cur = prev[cur]; }
+
+  const layers = {};
+  for (let i = 0; i <= n; i++) {
+    const d = dist[i];
+    if (d === -1) continue;
+    if (!layers[d]) layers[d] = [];
+    layers[d].push(i);
+  }
+  const maxLayer = Math.max(...Object.keys(layers).map(Number));
+
+  const canvas = document.getElementById('c');
+  const DPR = window.devicePixelRatio || 1;
+  const W = Math.min(720, canvas.parentElement.clientWidth - 32);
+  const layerCount = maxLayer + 1;
+  const nodeR = 18;
+  const hPad = 40, vPad = 50;
+  const layerH = 80;
+  const H = vPad * 2 + layerCount * layerH;
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+  ctx.clearRect(0, 0, W, H);
+
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const textCol = isDark ? '#e5e5e5' : '#1a1a1a';
+  const mutedCol = isDark ? '#888' : '#aaa';
+  const bgCol = isDark ? '#2a2a2a' : '#f5f5f5';
+  const pathNodeFill = isDark ? '#3c3489' : '#EEEDFE';
+  const pathNodeStroke = isDark ? '#AFA9EC' : '#534AB7';
+  const pathNodeText = isDark ? '#CECBF6' : '#26215C';
+  const normNodeFill = isDark ? '#2a2a2a' : '#f9f9f9';
+  const normNodeStroke = isDark ? '#444' : '#ccc';
+  const startFill = isDark ? '#085041' : '#E1F5EE';
+  const startStroke = isDark ? '#5DCAA5' : '#0F6E56';
+  const startText = isDark ? '#9FE1CB' : '#04342C';
+  const endFill = isDark ? '#3C3489' : '#CECBF6';
+  const pathEdgeCol = isDark ? '#7F77DD' : '#534AB7';
+  const normEdgeCol = isDark ? '#333' : '#e0e0e0';
+
+  const pos = {};
+  for (const [d, nodes] of Object.entries(layers)) {
+    const layer = parseInt(d);
+    const y = vPad + layer * layerH;
+    const count = nodes.length;
+    nodes.forEach((nd, idx) => {
+      const x = hPad + (idx + 0.5) * (W - 2*hPad) / count;
+      pos[nd] = {x, y};
+    });
+  }
+
+  for (let i = 0; i <= n; i++) {
+    if (dist[i] === -1) continue;
+    for (const sq of squares) {
+      const j = i - sq;
+      if (j >= 0 && dist[j] === dist[i] + 1) {
+        const onPath = path.has(i) && path.has(j) && prev[j] === i;
+        ctx.beginPath();
+        ctx.moveTo(pos[i].x, pos[i].y);
+        ctx.lineTo(pos[j].x, pos[j].y);
+        ctx.strokeStyle = onPath ? pathEdgeCol : normEdgeCol;
+        ctx.lineWidth = onPath ? 2 : 0.8;
+        ctx.globalAlpha = onPath ? 1 : 0.4;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        if (onPath) {
+          const mx = (pos[i].x + pos[j].x) / 2;
+          const my = (pos[i].y + pos[j].y) / 2;
+          ctx.font = `11px var(--font-mono, monospace)`;
+          ctx.fillStyle = pathEdgeCol;
+          ctx.textAlign = 'center';
+          ctx.fillText(`-${i-j}`, mx + 6, my - 4);
+        }
+      }
+    }
+  }
+
+  for (let i = 0; i <= n; i++) {
+    if (!pos[i]) continue;
+    const {x, y} = pos[i];
+    const onPath = path.has(i);
+    const isStart = i === n;
+    const isEnd = i === 0;
+
+    ctx.beginPath();
+    ctx.arc(x, y, nodeR, 0, Math.PI*2);
+    if (isStart) { ctx.fillStyle = startFill; ctx.strokeStyle = startStroke; }
+    else if (isEnd) { ctx.fillStyle = endFill; ctx.strokeStyle = pathNodeStroke; }
+    else if (onPath) { ctx.fillStyle = pathNodeFill; ctx.strokeStyle = pathNodeStroke; }
+    else { ctx.fillStyle = normNodeFill; ctx.strokeStyle = normNodeStroke; }
+    ctx.lineWidth = onPath || isStart ? 2 : 1;
+    ctx.fill(); ctx.stroke();
+
+    ctx.font = `500 12px var(--font-mono, monospace)`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    if (isStart) ctx.fillStyle = startText;
+    else if (isEnd || onPath) ctx.fillStyle = pathNodeText;
+    else ctx.fillStyle = mutedCol;
+    ctx.fillText(i, x, y);
+  }
+
+  for (const [d, nodes] of Object.entries(layers)) {
+    const layer = parseInt(d);
+    const y = vPad + layer * layerH;
+    ctx.font = `11px var(--font-mono, monospace)`;
+    ctx.fillStyle = mutedCol;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`step ${layer}`, 2, y);
+  }
+}
+
+draw();
+</script>

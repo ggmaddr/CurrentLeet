@@ -1,0 +1,60 @@
+<svg viewBox="0 0 800 330" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background (REQUIRED) -->
+  <rect width="800" height="330" fill="#f8f9fa" rx="10"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="17" font-weight="bold" text-anchor="middle" fill="#2c3e50">Unbounded Knapsack: Same-Row Transition</text>
+
+  <!-- Row labels -->
+  <text x="55" y="100" font-family="monospace" font-size="12" text-anchor="middle" fill="#7f8c8d">i-1</text>
+  <text x="55" y="175" font-family="monospace" font-size="12" text-anchor="middle" fill="#7f8c8d">i</text>
+
+  <!-- Sum labels -->
+  <text x="110" y="55" font-family="monospace" font-size="11" text-anchor="middle" fill="#7f8c8d">j-c</text>
+  <text x="175" y="55" font-family="monospace" font-size="11" text-anchor="middle" fill="#7f8c8d">...</text>
+  <text x="240" y="55" font-family="monospace" font-size="11" text-anchor="middle" fill="#7f8c8d">j</text>
+
+  <!-- Previous row cells -->
+  <rect x="80" y="70" width="60" height="45" fill="#ffffff" stroke="#dee2e6" stroke-width="1.5" rx="3"/>
+  <text x="145" y="97" font-family="monospace" font-size="14" text-anchor="middle" fill="#7f8c8d">...</text>
+  <rect x="210" y="70" width="60" height="45" fill="#fce7f3" stroke="#ec4899" stroke-width="2" rx="3"/>
+  <text x="240" y="98" font-family="monospace" font-size="9" text-anchor="middle" fill="#ec4899">dp[i-1][j]</text>
+
+  <!-- Current row cells -->
+  <rect x="80" y="145" width="60" height="45" fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="3"/>
+  <text x="110" y="173" font-family="monospace" font-size="9" text-anchor="middle" fill="#10b981">dp[i][j-c]</text>
+
+  <text x="145" y="172" font-family="monospace" font-size="14" text-anchor="middle" fill="#7f8c8d">...</text>
+
+  <rect x="210" y="145" width="60" height="45" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5" rx="3"/>
+  <text x="240" y="173" font-family="monospace" font-size="9" text-anchor="middle" fill="#f59e0b">dp[i][j]</text>
+
+  <!-- Skip arrow (from previous row, vertical) -->
+  <path d="M 240,118 L 240,140" stroke="#ec4899" stroke-width="2" fill="none"/>
+  <polygon points="240,143 235,135 245,135" fill="#ec4899"/>
+
+  <!-- Take arrow (from same row, left with gap) -->
+  <path d="M 145,167 L 205,167" stroke="#10b981" stroke-width="2.5" fill="none"/>
+  <polygon points="208,167 200,162 200,172" fill="#10b981"/>
+
+  <!-- Explanation box -->
+  <rect x="320" y="55" width="440" height="160" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="8"/>
+  <text x="540" y="80" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">Transition Logic (Counting)</text>
+
+  <text x="340" y="108" font-family="Arial, sans-serif" font-size="12" fill="#ec4899">Skip:</text>
+  <text x="385" y="108" font-family="monospace" font-size="11" fill="#2c3e50">dp[i-1][j] — don't use this coin type</text>
+
+  <text x="340" y="133" font-family="Arial, sans-serif" font-size="12" fill="#10b981">Take:</text>
+  <text x="385" y="133" font-family="monospace" font-size="11" fill="#2c3e50">dp[i][j-c] — use one coin, stay on same row</text>
+
+  <text x="340" y="165" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">Same row reference → coin still available</text>
+  <text x="340" y="185" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">1D optimization: iterate j left-to-right</text>
+  <text x="340" y="205" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">(c = coin value, cells are c positions apart)</text>
+
+  <!-- Formula -->
+  <rect x="80" y="240" width="640" height="45" fill="#e3f2fd" stroke="#3498db" stroke-width="1" rx="5"/>
+  <text x="400" y="268" font-family="monospace" font-size="12" text-anchor="middle" fill="#2c3e50">dp[i][j] = dp[i-1][j] + dp[i][j-c]  (counting combinations)</text>
+
+  <!-- Key insight -->
+  <text x="400" y="310" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#10b981" font-weight="bold">Key: Reference same row (i) when taking coin — allows unlimited reuse</text>
+</svg>

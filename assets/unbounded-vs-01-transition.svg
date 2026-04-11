@@ -1,0 +1,90 @@
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background (REQUIRED) -->
+  <rect width="800" height="380" fill="#f8f9fa" rx="10"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#2c3e50">0/1 vs Unbounded: Row Reference</text>
+
+  <!-- Left side: 0/1 Knapsack -->
+  <text x="200" y="60" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#3498db">0/1 Knapsack</text>
+  <text x="200" y="78" font-family="monospace" font-size="11" text-anchor="middle" fill="#7f8c8d">dp[i-1][j-w] (previous row)</text>
+
+  <!-- 0/1 Grid -->
+  <!-- Row i-1 -->
+  <text x="80" y="115" font-family="monospace" font-size="11" text-anchor="middle" fill="#7f8c8d">i-1</text>
+  <rect x="100" y="98" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="150" y="98" width="45" height="32" fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="3"/>
+  <text x="172" y="118" font-family="monospace" font-size="10" text-anchor="middle" fill="#10b981">j-w</text>
+  <rect x="200" y="98" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="250" y="98" width="45" height="32" fill="#fce7f3" stroke="#ec4899" stroke-width="2" rx="3"/>
+  <text x="272" y="118" font-family="monospace" font-size="10" text-anchor="middle" fill="#ec4899">j</text>
+
+  <!-- Row i -->
+  <text x="80" y="160" font-family="monospace" font-size="11" text-anchor="middle" fill="#7f8c8d">i</text>
+  <rect x="100" y="143" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="150" y="143" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="200" y="143" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="250" y="143" width="45" height="32" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5" rx="3"/>
+  <text x="272" y="163" font-family="monospace" font-size="10" text-anchor="middle" fill="#f59e0b">dp[i][j]</text>
+
+  <!-- 0/1 Arrows -->
+  <!-- Skip arrow (vertical) -->
+  <path d="M 272,132 L 272,140" stroke="#ec4899" stroke-width="2" fill="none"/>
+  <polygon points="272,143 267,136 277,136" fill="#ec4899"/>
+
+  <!-- Include arrow (diagonal from previous row) -->
+  <path d="M 180,130 Q 220,140 262,148" stroke="#10b981" stroke-width="2" fill="none"/>
+  <polygon points="265,150 255,145 257,155" fill="#10b981"/>
+
+  <!-- Divider -->
+  <line x1="400" y1="55" x2="400" y2="190" stroke="#dee2e6" stroke-width="2" stroke-dasharray="5,5"/>
+
+  <!-- Right side: Unbounded Knapsack -->
+  <text x="600" y="60" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#27ae60">Unbounded Knapsack</text>
+  <text x="600" y="78" font-family="monospace" font-size="11" text-anchor="middle" fill="#7f8c8d">dp[i][j-w] (same row)</text>
+
+  <!-- Unbounded Grid -->
+  <!-- Row i-1 -->
+  <text x="480" y="115" font-family="monospace" font-size="11" text-anchor="middle" fill="#7f8c8d">i-1</text>
+  <rect x="500" y="98" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="550" y="98" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="600" y="98" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="650" y="98" width="45" height="32" fill="#fce7f3" stroke="#ec4899" stroke-width="2" rx="3"/>
+  <text x="672" y="118" font-family="monospace" font-size="10" text-anchor="middle" fill="#ec4899">j</text>
+
+  <!-- Row i -->
+  <text x="480" y="160" font-family="monospace" font-size="11" text-anchor="middle" fill="#7f8c8d">i</text>
+  <rect x="500" y="143" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="550" y="143" width="45" height="32" fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="3"/>
+  <text x="572" y="163" font-family="monospace" font-size="10" text-anchor="middle" fill="#10b981">j-w</text>
+  <rect x="600" y="143" width="45" height="32" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="3"/>
+  <rect x="650" y="143" width="45" height="32" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5" rx="3"/>
+  <text x="672" y="163" font-family="monospace" font-size="10" text-anchor="middle" fill="#f59e0b">dp[i][j]</text>
+
+  <!-- Unbounded Arrows -->
+  <!-- Skip arrow (vertical) -->
+  <path d="M 672,132 L 672,140" stroke="#ec4899" stroke-width="2" fill="none"/>
+  <polygon points="672,143 667,136 677,136" fill="#ec4899"/>
+
+  <!-- Include arrow (horizontal from same row) -->
+  <path d="M 598,159 L 645,159" stroke="#10b981" stroke-width="2" fill="none"/>
+  <polygon points="648,159 640,154 640,164" fill="#10b981"/>
+
+  <!-- Explanation boxes -->
+  <rect x="50" y="210" width="320" height="80" fill="#ffffff" stroke="#3498db" stroke-width="1.5" rx="8"/>
+  <text x="210" y="235" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#3498db">0/1: Previous Row Reference</text>
+  <text x="210" y="255" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#2c3e50">Include uses dp[i-1][j-w]</text>
+  <text x="210" y="275" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">Item consumed → can't reuse</text>
+
+  <rect x="430" y="210" width="320" height="80" fill="#ffffff" stroke="#27ae60" stroke-width="1.5" rx="8"/>
+  <text x="590" y="235" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#27ae60">Unbounded: Same Row Reference</text>
+  <text x="590" y="255" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#2c3e50">Include uses dp[i][j-w]</text>
+  <text x="590" y="275" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">Item still available → can reuse</text>
+
+  <!-- Bottom formulas -->
+  <rect x="50" y="310" width="320" height="50" fill="#e3f2fd" stroke="#3498db" stroke-width="1" rx="5"/>
+  <text x="210" y="340" font-family="monospace" font-size="12" text-anchor="middle" fill="#2c3e50">dp[i][j] = dp[i-1][j] + dp[i-1][j-w]</text>
+
+  <rect x="430" y="310" width="320" height="50" fill="#d1fae5" stroke="#27ae60" stroke-width="1" rx="5"/>
+  <text x="590" y="340" font-family="monospace" font-size="12" text-anchor="middle" fill="#2c3e50">dp[i][j] = dp[i-1][j] + dp[i][j-w]</text>
+</svg>
